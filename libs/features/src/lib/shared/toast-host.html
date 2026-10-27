@@ -1,0 +1,21 @@
+<div class="dm-toasts" aria-live="polite" aria-atomic="false">
+  @for (toast of toasts.toasts(); track toast.id) {
+    <div class="dm-toast" [attr.data-intent]="toast.intent">
+      @switch (toast.intent) {
+        @case ('success') {
+          <svg lucideCircleCheck class="dm-toast__icon" aria-hidden="true"></svg>
+        }
+        @case ('error') {
+          <svg lucideCircleAlert class="dm-toast__icon" aria-hidden="true"></svg>
+        }
+        @default {
+          <svg lucideInfo class="dm-toast__icon" aria-hidden="true"></svg>
+        }
+      }
+      <p>{{ toast.message }}</p>
+      <button type="button" (click)="toasts.dismiss(toast.id)" [attr.aria-label]="i18n.t('common.close')">
+        <svg lucideX aria-hidden="true"></svg>
+      </button>
+    </div>
+  }
+</div>

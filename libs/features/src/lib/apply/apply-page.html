@@ -1,0 +1,199 @@
+<header class="dm-apply-top">
+  <div class="dm-apply-top__inner">
+    <a routerLink="/" class="dm-apply-top__brand" aria-label="Doctor Mundi">
+      <dm-logo />
+    </a>
+
+    @if (mission(); as m) {
+      <div class="dm-apply-top__mission">
+        <span>{{ i18n.t('apply.title') }}</span>
+        <strong>{{ i18n.loc(m.title) }}</strong>
+      </div>
+    }
+
+    <div class="dm-apply-top__actions">
+      <dm-language-switcher (languageChange)="onLanguageChange()" />
+      @if (mission(); as m) {
+        <a class="dm-apply-top__close" [routerLink]="['/misiones', m.slug]">
+          <svg lucideX aria-hidden="true"></svg>
+          <span>{{ i18n.t('common.close') }}</span>
+        </a>
+      }
+    </div>
+  </div>
+</header>
+
+<main class="dm-apply dm-page">
+  <div class="dm-container">
+    @if (!mission()) {
+      <div class="dm-apply__skeleton">
+        <div class="dm-skeleton dm-apply__skeleton-form"></div>
+        <div class="dm-skeleton dm-apply__skeleton-aside"></div>
+      </div>
+    } @else {
+      @let m = mission()!;
+      @if (!success() && !alreadyApplied()) {
+        <h1 class="dm-sr-only">{{ i18n.t('apply.title') }} · {{ i18n.loc(m.title) }}</h1>
+      }
+      <div class="dm-apply__grid">
+        <section class="dm-apply__main" [attr.aria-busy]="submitting()">
+          @if (success()) {
+            <div class="dm-apply__success">
+              <svg lucideCircleCheck aria-hidden="true"></svg>
+              <p class="dm-eyebrow">{{ i18n.t('apply.title') }}</p>
+              <h1>{{ i18n.t('apply.successTitle') }}</h1>
+              <p class="dm-apply__success-body">{{ i18n.t('apply.successBody') }}</p>
+
+              <div class="dm-apply__next">
+                <h2>{{ i18n.t('apply.successNext') }}</h2>
+                <ol>
+                  <li>
+                    <span>01</span>
+                    <div>
+                      <strong>{{ i18n.t('apply.next1') }}</strong>
+                      <p>{{ i18n.t('apply.next1Body') }}</p>
+                    </div>
+                  </li>
+                  <li>
+                    <span>02</span>
+                    <div>
+                      <strong>{{ i18n.t('apply.next2') }}</strong>
+                      <p>{{ i18n.t('apply.next2Body') }}</p>
+                    </div>
+                  </li>
+                  <li>
+                    <span>03</span>
+                    <div>
+                      <strong>{{ i18n.t('apply.next3') }}</strong>
+                      <p>{{ i18n.t('apply.next3Body') }}</p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+
+              <div class="dm-apply__success-actions">
+                <a ui-button routerLink="/postulaciones" intent="primary">
+                  {{ i18n.t('apply.viewApplications') }}
+                  <svg lucideArrowUpRight aria-hidden="true"></svg>
+                </a>
+                <a ui-button [routerLink]="['/misiones', m.slug]" variant="outline" intent="neutral">
+                  <svg lucideArrowLeft aria-hidden="true"></svg>
+                  {{ i18n.t('apply.backToMission') }}
+                </a>
+              </div>
+            </div>
+          } @else if (alreadyApplied()) {
+            <div class="dm-apply__already">
+              <svg lucideBadgeCheck aria-hidden="true"></svg>
+              <p class="dm-eyebrow">{{ i18n.t('apply.title') }}</p>
+              <h1>{{ i18n.t('apply.alreadyApplied') }}</h1>
+              <p>{{ i18n.t('apply.alreadyAppliedBody') }}</p>
+              <span class="dm-status" [class]="'dm-status dm-status--' + application()!.status">
+                {{ applicationStatus() }}
+              </span>
+              <div class="dm-apply__success-actions">
+                <a ui-button routerLink="/postulaciones" intent="primary">
+                  {{ i18n.t('apply.viewApplications') }}
+                  <svg lucideArrowUpRight aria-hidden="true"></svg>
+                </a>
+                <a ui-button [routerLink]="['/misiones', m.slug]" variant="outline" intent="neutral">
+                  {{ i18n.t('apply.backToMission') }}
+                </a>
+              </div>
+            </div>
+          } @else {
+            <div class="dm-apply__form">
+              @if (!profile.profile()) {
+                <div class="dm-apply__profile-skeleton">
+                  <div class="dm-skeleton dm-apply__line"></div>
+                  <div class="dm-skeleton dm-apply__line"></div>
+                  <div class="dm-skeleton dm-apply__line dm-apply__line--short"></div>
+                </div>
+              } @else {
+                <tf-form
+                  dmDateFields
+                  [config]="config()"
+                  [model]="model()"
+                  (valueChange)="onValueChange($event)"
+                  (formSubmit)="submit($event)"
+                  (invalidSubmit)="onInvalidSubmit()"
+                />
+              }
+              @if (submitting()) {
+                <div class="dm-apply__submitting" role="status">
+                  <span class="dm-apply__spinner" aria-hidden="true"></span>
+                  {{ i18n.t('apply.submitting') }}
+                </div>
+              }
+            </div>
+            <p class="dm-apply__demo-note">
+              <svg lucideBadgeCheck aria-hidden="true"></svg>
+              {{ i18n.t('auth.demoHint') }}
+            </p>
+          }
+        </section>
+
+        <aside class="dm-apply__aside">
+          <div class="dm-apply-brief">
+            <div class="dm-apply-brief__media">
+              <img [src]="m.photos[0]" [alt]="i18n.loc(m.title)" />
+              <dm-urgency-tag [urgency]="m.urgency" />
+            </div>
+            <div class="dm-apply-brief__body">
+              @if (organization(); as org) {
+                <a class="dm-apply-brief__org" [routerLink]="['/organizaciones', org.slug]">
+                  <dm-organization-mark [organization]="org" size="sm" />
+                  <span>{{ org.name }}</span>
+                  @if (org.verified) {
+                    <svg lucideBadgeCheck aria-hidden="true"></svg>
+                  }
+                </a>
+              }
+              <h2>{{ i18n.loc(m.title) }}</h2>
+              <p>{{ i18n.loc(m.summary) }}</p>
+
+              <div class="dm-apply-brief__meta">
+                <span>
+                  <svg lucideMapPin aria-hidden="true"></svg>
+                  {{ place() }}
+                </span>
+                <span>
+                  <svg lucideCalendarDays aria-hidden="true"></svg>
+                  {{ dates() }}
+                </span>
+                <span>
+                  <svg lucideClock3 aria-hidden="true"></svg>
+                  {{ duration() }}
+                </span>
+                <span>
+                  <svg lucideUsers aria-hidden="true"></svg>
+                  {{ i18n.t('mission.slotsValue', { filled: m.slots.filled, total: m.slots.total }) }}
+                </span>
+              </div>
+
+              <div class="dm-apply-brief__slots">
+                <div>
+                  <span>{{ i18n.t('mission.slots') }}</span>
+                  <strong>{{ m.slots.total - m.slots.filled }}</strong>
+                </div>
+                <div class="dm-apply-brief__bar" aria-hidden="true">
+                  <span [style.width.%]="(m.slots.filled / m.slots.total) * 100"></span>
+                </div>
+              </div>
+
+              <div class="dm-apply-brief__languages">
+                @for (language of m.languages; track language.code) {
+                  <span class="dm-tag dm-tag--ghost">
+                    {{ i18n.languageName(language.code) }}
+                  </span>
+                }
+              </div>
+
+              <p class="dm-apply-brief__note">{{ i18n.t('mission.applySub') }}</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+    }
+  </div>
+</main>

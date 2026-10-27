@@ -1,0 +1,261 @@
+<section class="dm-page dm-apps">
+  <div class="dm-container">
+    <header class="dm-page-head dm-apps__head">
+      <div class="dm-page-head__copy">
+        <p class="dm-eyebrow">{{ i18n.t('nav.applications') }}</p>
+        <h1>{{ i18n.t('applications.title') }}</h1>
+        <p class="dm-page-head__sub">{{ i18n.t('applications.sub') }}</p>
+      </div>
+      <div class="dm-page-head__actions">
+        <a ui-button intent="primary" routerLink="/misiones">
+          {{ i18n.t('common.exploreMissions') }}
+          <svg lucideArrowRight aria-hidden="true"></svg>
+        </a>
+      </div>
+    </header>
+
+    @if (!loading() && applications().length) {
+      <div class="dm-apps-stats">
+        <div>
+          <span>{{ i18n.t('applications.statTotal') }}</span>
+          <strong>{{ counts().all }}</strong>
+        </div>
+        <div>
+          <span>{{ i18n.t('applications.active') }}</span>
+          <strong>{{ counts().active }}</strong>
+        </div>
+        <div>
+          <span>{{ i18n.t('applications.statInterview') }}</span>
+          <strong>{{ counts().interview }}</strong>
+        </div>
+        <div>
+          <span>{{ i18n.t('applications.closed') }}</span>
+          <strong>{{ counts().closed }}</strong>
+        </div>
+      </div>
+    }
+
+    <div class="dm-apps-toolbar">
+      <div class="dm-tabs dm-apps-filter" role="tablist" [attr.aria-label]="i18n.t('applications.filterLabel')">
+        <button
+          type="button"
+          role="tab"
+          [attr.aria-selected]="filter() === 'all'"
+          [class.is-active]="filter() === 'all'"
+          (click)="selectFilter('all')"
+        >
+          {{ i18n.t('applications.all') }}
+          <span class="dm-apps-filter__count">{{ counts().all }}</span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          [attr.aria-selected]="filter() === 'active'"
+          [class.is-active]="filter() === 'active'"
+          (click)="selectFilter('active')"
+        >
+          {{ i18n.t('applications.active') }}
+          <span class="dm-apps-filter__count">{{ counts().active }}</span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          [attr.aria-selected]="filter() === 'closed'"
+          [class.is-active]="filter() === 'closed'"
+          (click)="selectFilter('closed')"
+        >
+          {{ i18n.t('applications.closed') }}
+          <span class="dm-apps-filter__count">{{ counts().closed }}</span>
+        </button>
+      </div>
+      <p class="dm-apps-toolbar__hint">
+        <svg lucideInfo aria-hidden="true"></svg>
+        {{ i18n.t('applications.helpTitle') }}
+      </p>
+    </div>
+
+    @if (loading()) {
+      <div class="dm-apps-list dm-apps-list--loading">
+        <div class="dm-skeleton"></div>
+        <div class="dm-skeleton"></div>
+      </div>
+    } @else if (rows().length) {
+      <div class="dm-apps-list">
+        @for (row of rows(); track row.application.id) {
+          @let application = row.application;
+          <article class="dm-app-card">
+            <header class="dm-app-card__head">
+              <div class="dm-app-card__mission">
+                @if (row.organization) {
+                  <span
+                    class="dm-app-org-mark"
+                    [style.background]="row.organization.color"
+                    aria-hidden="true"
+                  >
+                    {{ row.organization.monogram }}
+                  </span>
+                } @else {
+                  <span class="dm-app-org-mark dm-app-org-mark--fallback" aria-hidden="true">DM</span>
+                }
+                <div class="dm-app-card__mission-copy">
+                  <span class="dm-app-card__org">
+                    {{ orgName(row) || i18n.t('applications.missionMissing') }}
+                  </span>
+                  <h2>
+                    @if (row.mission) {
+                      <a [routerLink]="['/misiones', row.mission.slug]">{{ missionTitle(row) }}</a>
+                    } @else {
+                      {{ missionTitle(row) }}
+                    }
+                  </h2>
+                  @if (row.mission) {
+                    <div class="dm-app-card__place">
+                      <svg lucideMapPin aria-hidden="true"></svg>
+                      {{ row.mission.city }}, {{ countryName(row.mission.countryCode) }}
+                      <span aria-hidden="true">·</span>
+                      {{ i18n.formatDateRange(row.mission.startDate, row.mission.endDate) }}
+                    </div>
+                  }
+                </div>
+              </div>
+              <span [class]="statusClass(application.status)">
+                {{ statusLabel(application.status) }}
+              </span>
+            </header>
+
+            <div class="dm-app-card__meta">
+              <span>
+                <svg lucideCalendarDays aria-hidden="true"></svg>
+                {{ i18n.t('applications.submittedOn', { date: date(application.submittedAt) }) }}
+              </span>
+              <span>
+                <svg lucideClock3 aria-hidden="true"></svg>
+                {{ i18n.t('applications.updatedOn', { date: date(application.updatedAt) }) }}
+              </span>
+            </div>
+
+            <div class="dm-app-timeline" [attr.aria-label]="i18n.t('applications.timeline')">
+              @for (entry of application.timeline; track entry.status + entry.date; let last = $last) {
+                <div
+                  class="dm-app-timeline__step"
+                  [class.is-current]="entry.status === application.status"
+                  [class.is-last]="last"
+                >
+                  <span class="dm-app-timeline__dot" aria-hidden="true"></span>
+                  <span class="dm-app-timeline__label">{{ statusLabel(entry.status) }}</span>
+                  <span class="dm-app-timeline__date">{{ date(entry.date) }}</span>
+                </div>
+              }
+            </div>
+
+            @if (applicationNote(application); as note) {
+              <blockquote class="dm-app-card__note">
+                <svg lucideMessageSquare aria-hidden="true"></svg>
+                {{ note }}
+              </blockquote>
+            }
+
+            <div class="dm-app-card__next">
+              <span class="dm-app-card__next-icon">
+                @switch (nextIcon(application.status)) {
+                  @case ('calendar') {
+                    <svg lucideCalendarDays aria-hidden="true"></svg>
+                  }
+                  @case ('message') {
+                    <svg lucideMessageSquare aria-hidden="true"></svg>
+                  }
+                  @case ('check') {
+                    <svg lucideCheck aria-hidden="true"></svg>
+                  }
+                  @case ('info') {
+                    <svg lucideInfo aria-hidden="true"></svg>
+                  }
+                  @default {
+                    <svg lucideClock3 aria-hidden="true"></svg>
+                  }
+                }
+              </span>
+              <div>
+                <span class="dm-app-card__next-label">{{ i18n.t('applications.nextSteps') }}</span>
+                <p>{{ i18n.t(row.nextStep) }}</p>
+              </div>
+            </div>
+
+            <footer class="dm-app-card__actions">
+              @if (row.mission) {
+                <a ui-button variant="outline" intent="neutral" [routerLink]="['/misiones', row.mission.slug]">
+                  {{ i18n.t('applications.viewMission') }}
+                  <svg lucideArrowUpRight aria-hidden="true"></svg>
+                </a>
+              } @else {
+                <a ui-button variant="outline" intent="neutral" routerLink="/misiones">
+                  {{ i18n.t('common.exploreMissions') }}
+                </a>
+              }
+              @if (canWithdraw(application)) {
+                <button ui-button variant="ghost" intent="danger" type="button" (click)="openWithdraw(application)">
+                  {{ i18n.t('applications.withdraw') }}
+                </button>
+              }
+            </footer>
+          </article>
+        }
+      </div>
+    } @else {
+      <div class="dm-empty dm-apps-empty">
+        @if (applications().length) {
+          <h2>{{ i18n.t(filter() === 'closed' ? 'applications.emptyClosed' : 'applications.emptyActive') }}</h2>
+          <p>{{ i18n.t('applications.emptyFilteredBody') }}</p>
+          <button ui-button variant="outline" intent="neutral" type="button" (click)="selectFilter('all')">
+            {{ i18n.t('applications.all') }}
+          </button>
+        } @else {
+          <h2>{{ i18n.t('applications.empty') }}</h2>
+          <p>{{ i18n.t('applications.emptyBody') }}</p>
+          <a ui-button intent="primary" routerLink="/misiones">{{ i18n.t('common.exploreMissions') }}</a>
+        }
+      </div>
+    }
+
+    @if (applications().length) {
+      <aside class="dm-apps-help">
+        <span><svg lucideInfo aria-hidden="true"></svg></span>
+        <div>
+          <h2>{{ i18n.t('applications.helpTitle') }}</h2>
+          <p>{{ i18n.t('applications.helpBody') }}</p>
+        </div>
+      </aside>
+    }
+  </div>
+</section>
+
+@if (withdrawTarget(); as target) {
+  <div class="dm-apps-modal-backdrop" (click)="closeWithdraw()">
+    <div
+      class="dm-apps-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="withdraw-modal-title"
+      (click)="$event.stopPropagation()"
+    >
+      <header class="dm-apps-modal__head">
+        <div>
+          <p class="dm-eyebrow">{{ i18n.t('applications.withdraw') }}</p>
+          <h2 id="withdraw-modal-title">{{ i18n.t('applications.withdrawTitle') }}</h2>
+          <p>{{ i18n.t('applications.withdrawBody') }}</p>
+        </div>
+        <button class="dm-apps-modal__close" type="button" [attr.aria-label]="i18n.t('common.close')" (click)="closeWithdraw()">
+          <svg lucideX aria-hidden="true"></svg>
+        </button>
+      </header>
+      <div class="dm-apps-modal__actions">
+        <button ui-button variant="ghost" intent="neutral" type="button" (click)="closeWithdraw()">
+          {{ i18n.t('common.cancel') }}
+        </button>
+        <button ui-button intent="danger" type="button" [disabled]="withdrawing()" (click)="withdraw()">
+          {{ i18n.t('applications.withdrawConfirm') }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

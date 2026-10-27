@@ -1,0 +1,624 @@
+@if (loading()) {
+  <section class="dm-page">
+    <div class="dm-container dm-profile-skeleton">
+      <div class="dm-skeleton dm-profile-skeleton__hero"></div>
+      <div class="dm-skeleton dm-profile-skeleton__body"></div>
+    </div>
+  </section>
+} @else if (profile(); as p) {
+  <article class="dm-profile">
+    <header class="dm-profile-hero">
+      <div class="dm-profile-hero__pattern" aria-hidden="true"></div>
+      <div class="dm-container dm-profile-hero__inner">
+        <div class="dm-profile-hero__crumbs">
+          <span>{{ i18n.t('nav.profile') }}</span>
+          <span aria-hidden="true">/</span>
+          <span>{{ p.name }}</span>
+        </div>
+
+        <div class="dm-profile-hero__grid">
+          <div class="dm-profile-hero__identity">
+            <ui-avatar [src]="p.avatar" [name]="p.name" size="xl" shape="rounded" />
+            <div class="dm-profile-hero__copy">
+              <div class="dm-profile-hero__badges">
+                @if (p.verified) {
+                  <span class="dm-profile-verified">
+                    <svg lucideShieldCheck aria-hidden="true"></svg>
+                    {{ i18n.t('profile.verified') }}
+                  </span>
+                }
+                <span>{{ i18n.t('profile.memberSince', { date: date(p.joinedAt) }) }}</span>
+              </div>
+              <h1>{{ p.name }}</h1>
+              <p class="dm-profile-hero__headline">{{ i18n.loc(p.headline) }}</p>
+              <div class="dm-profile-hero__meta">
+                <span>
+                  <svg lucideMapPin aria-hidden="true"></svg>
+                  {{ p.location.city }}, {{ countryName(p.location.countryCode) }}
+                </span>
+                <span>
+                  <svg lucideCalendarDays aria-hidden="true"></svg>
+                  {{ i18n.formatDateRange(p.availability.from, p.availability.to) }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <aside class="dm-profile-score-card">
+            <div class="dm-profile-score-card__head">
+              <div>
+                <p class="dm-eyebrow">{{ i18n.t('common.score') }}</p>
+                <h2>{{ i18n.t('profile.readiness') }}</h2>
+              </div>
+              <dm-score-ring [score]="p.score.total" [size]="118" />
+            </div>
+            <p>{{ i18n.t('profile.scoreHint') }}</p>
+            <div class="dm-profile-score-card__stats">
+              <div>
+                <strong>{{ p.stats.missions }}</strong>
+                <span>{{ i18n.t('profile.statsMissions') }}</span>
+              </div>
+              <div>
+                <strong>{{ p.stats.countries }}</strong>
+                <span>{{ i18n.t('profile.statsCountries') }}</span>
+              </div>
+              <div>
+                <strong>{{ i18n.formatNumber(p.stats.hours) }}</strong>
+                <span>{{ i18n.t('profile.statsHours') }}</span>
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        <div class="dm-profile-hero__actions">
+          <a ui-button intent="primary" routerLink="/perfil/editar">
+            <svg lucidePencil aria-hidden="true"></svg>
+            {{ i18n.t('profile.edit') }}
+          </a>
+          <a ui-button variant="outline" intent="neutral" routerLink="/deseos">
+            <svg lucideHeart aria-hidden="true"></svg>
+            {{ i18n.t('nav.wishes') }}
+          </a>
+          <a ui-button variant="ghost" intent="neutral" routerLink="/postulaciones">
+            {{ i18n.t('nav.applications') }}
+            @if (activeApplications().length) {
+              <span class="dm-profile-hero__count">{{ activeApplications().length }}</span>
+            }
+            <svg lucideArrowUpRight aria-hidden="true"></svg>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <div class="dm-profile__tabs-wrap">
+      <div class="dm-container">
+        <div class="dm-tabs dm-profile-tabs" role="tablist" [attr.aria-label]="i18n.t('profile.title')">
+          @for (item of tabs; track item.id) {
+            <button
+              type="button"
+              role="tab"
+              [id]="'profile-tab-' + item.id"
+              [attr.aria-selected]="tab() === item.id"
+              [attr.aria-controls]="'profile-panel-' + item.id"
+              [class.is-active]="tab() === item.id"
+              (click)="selectTab(item.id)"
+            >
+              {{ i18n.t(item.label) }}
+              @if (item.id === 'recommendations' && recommendations().length) {
+                <span class="dm-profile-tabs__count">{{ recommendations().length }}</span>
+              }
+              @if (item.id === 'applications' && applications.applications().length) {
+                <span class="dm-profile-tabs__count">{{ applications.applications().length }}</span>
+              }
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="dm-page dm-profile__body">
+      <div class="dm-container">
+        @if (tab() === 'summary') {
+          <div
+            class="dm-profile-summary"
+            role="tabpanel"
+            id="profile-panel-summary"
+            aria-labelledby="profile-tab-summary"
+          >
+            <div class="dm-profile-summary__main">
+              <section class="dm-profile-panel">
+                <div class="dm-profile-panel__head">
+                  <p class="dm-eyebrow">{{ i18n.t('profile.aboutPanel') }}</p>
+                  <a class="dm-link-arrow" routerLink="/perfil/editar">
+                    {{ i18n.t('common.edit') }}
+                    <svg lucidePencil aria-hidden="true"></svg>
+                  </a>
+                </div>
+                <p class="dm-profile-bio">{{ i18n.loc(p.bio) }}</p>
+                <div class="dm-profile-facts">
+                  <div>
+                    <span>{{ i18n.t('common.location') }}</span>
+                    <strong>{{ p.location.city }}, {{ countryName(p.location.countryCode) }}</strong>
+                  </div>
+                  <div>
+                    <span>{{ i18n.t('profile.availability') }}</span>
+                    <strong>{{ i18n.formatDateRange(p.availability.from, p.availability.to) }}</strong>
+                  </div>
+                  <div>
+                    <span>{{ i18n.t('common.roles') }}</span>
+                    <strong>{{ p.roles.length }}</strong>
+                  </div>
+                  <div>
+                    <span>{{ i18n.t('common.languages') }}</span>
+                    <strong>{{ p.languages.length }}</strong>
+                  </div>
+                </div>
+              </section>
+
+              <section class="dm-profile-panel">
+                <div class="dm-profile-panel__head">
+                  <p class="dm-eyebrow">{{ i18n.t('profile.rolesAndSpecialties') }}</p>
+                </div>
+                <div class="dm-profile-group">
+                  <span class="dm-profile-group__label">{{ i18n.t('profile.roles') }}</span>
+                  <div class="dm-detail__chips">
+                    @for (role of p.roles; track role) {
+                      <span class="dm-tag dm-tag--standard">{{ roleLabel(role) }}</span>
+                    }
+                  </div>
+                </div>
+                <div class="dm-profile-group">
+                  <span class="dm-profile-group__label">{{ i18n.t('profile.specialties') }}</span>
+                  <div class="dm-detail__chips">
+                    @for (specialty of p.specialties; track specialty) {
+                      <span class="dm-tag dm-tag--sand">{{ specialtyLabel(specialty) }}</span>
+                    }
+                  </div>
+                </div>
+                <div class="dm-profile-group">
+                  <span class="dm-profile-group__label">{{ i18n.t('profile.languages') }}</span>
+                  <div class="dm-profile-languages">
+                    @for (language of p.languages; track language.code) {
+                      <div class="dm-profile-language">
+                        <strong>{{ languageName(language) }}</strong>
+                        <span>{{ levelLabel(language) }}</span>
+                      </div>
+                    }
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            <aside class="dm-profile-summary__aside">
+              <section class="dm-profile-panel dm-profile-breakdown">
+                <div class="dm-profile-panel__head">
+                  <div>
+                    <p class="dm-eyebrow">{{ i18n.t('common.score') }}</p>
+                    <h2>{{ i18n.t('profile.scoreBreakdown') }}</h2>
+                  </div>
+                </div>
+                <div class="dm-profile-bars">
+                  @for (bar of scoreBars(); track bar.key) {
+                    <div class="dm-profile-bar">
+                      <div class="dm-profile-bar__label">
+                        <span>{{ i18n.t(bar.key) }}</span>
+                        <strong>{{ bar.value }}<small>/{{ bar.max }}</small></strong>
+                      </div>
+                      <div class="dm-profile-bar__track">
+                        <span [style.width]="scorePercent(bar.value, bar.max)"></span>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </section>
+
+              <section class="dm-profile-next">
+                <div class="dm-profile-next__icon">
+                  @if (suggestion().tab === 'documents') {
+                    <svg lucideFileText aria-hidden="true"></svg>
+                  } @else if (suggestion().tab === 'wishes') {
+                    <svg lucideSparkles aria-hidden="true"></svg>
+                  } @else {
+                    <svg lucideHeart aria-hidden="true"></svg>
+                  }
+                </div>
+                <div>
+                  <p class="dm-eyebrow">{{ i18n.t('profile.improve') }}</p>
+                  <h2>{{ i18n.t(suggestion().title) }}</h2>
+                  <p>{{ i18n.t(suggestion().body) }}</p>
+                  <button type="button" class="dm-profile-next__action" (click)="selectTab(suggestion().tab)">
+                    {{ i18n.t(suggestion().action) }}
+                    <svg lucideArrowUpRight aria-hidden="true"></svg>
+                  </button>
+                </div>
+              </section>
+            </aside>
+          </div>
+        } @else if (tab() === 'experience') {
+          <div
+            class="dm-profile-tab-panel"
+            role="tabpanel"
+            id="profile-panel-experience"
+            aria-labelledby="profile-tab-experience"
+          >
+            <div class="dm-profile-tab-panel__head">
+              <div>
+                <p class="dm-eyebrow">{{ i18n.t('common.experience') }}</p>
+                <h2>{{ i18n.t('profile.experienceTitle') }}</h2>
+                <p>{{ i18n.t('profile.experienceSub') }}</p>
+              </div>
+              <a ui-button variant="outline" intent="neutral" routerLink="/perfil/editar">
+                {{ i18n.t('profile.edit') }}
+              </a>
+            </div>
+
+            @if (p.experience.length) {
+              <div class="dm-profile-timeline">
+                @for (item of p.experience; track item.id) {
+                  <article class="dm-profile-timeline__item">
+                    <div class="dm-profile-timeline__mark">
+                      <svg lucideBriefcase aria-hidden="true"></svg>
+                    </div>
+                    <div class="dm-profile-timeline__body">
+                      <div class="dm-profile-timeline__top">
+                        <span class="dm-profile-timeline__date">{{ experienceDates(item) }}</span>
+                        @if (item.verified) {
+                          <span class="dm-profile-verified dm-profile-verified--small">
+                            <svg lucideCheck aria-hidden="true"></svg>
+                            {{ i18n.t('common.verified') }}
+                          </span>
+                        }
+                      </div>
+                      <h3>{{ roleLabel(item.role) }} · {{ item.organization }}</h3>
+                      <p class="dm-profile-timeline__place">
+                        <svg lucideMapPin aria-hidden="true"></svg>
+                        {{ countryName(item.countryCode) }}
+                      </p>
+                      <p>{{ i18n.loc(item.summary) }}</p>
+                    </div>
+                  </article>
+                }
+              </div>
+            } @else {
+              <div class="dm-empty">
+                <h3>{{ i18n.t('profile.noExperience') }}</h3>
+                <p>{{ i18n.t('profile.noExperienceBody') }}</p>
+              </div>
+            }
+
+            <section class="dm-profile-education">
+              <div class="dm-profile-panel__head">
+                <div>
+                  <p class="dm-eyebrow">{{ i18n.t('profile.educationTitle') }}</p>
+                  <h2>{{ i18n.t('profile.educationTitle') }}</h2>
+                </div>
+              </div>
+              <div class="dm-profile-education__grid">
+                @for (item of p.education; track item.id) {
+                  <article>
+                    <div class="dm-profile-education__icon">
+                      <svg lucideGraduationCap aria-hidden="true"></svg>
+                    </div>
+                    <div>
+                      <h3>{{ i18n.loc(item.title) }}</h3>
+                      <p>{{ item.institution }} · {{ item.year }}</p>
+                    </div>
+                  </article>
+                }
+              </div>
+            </section>
+          </div>
+        } @else if (tab() === 'recommendations') {
+          <div
+            class="dm-profile-tab-panel"
+            role="tabpanel"
+            id="profile-panel-recommendations"
+            aria-labelledby="profile-tab-recommendations"
+          >
+            <div class="dm-profile-tab-panel__head">
+              <div>
+                <p class="dm-eyebrow">{{ i18n.t('common.recommendations') }}</p>
+                <h2>{{ i18n.t('profile.recommendationsTitle') }}</h2>
+                <p>{{ i18n.t('profile.requestRecommendationBody') }}</p>
+              </div>
+              <button ui-button intent="primary" (click)="openRecommendationRequest()">
+                <svg lucidePlus aria-hidden="true"></svg>
+                {{ i18n.t('profile.requestRecommendation') }}
+              </button>
+            </div>
+
+            @if (recommendations().length) {
+              <div class="dm-rec-grid">
+                @for (rec of recommendations(); track rec.id) {
+                  <article class="dm-rec-card" [class.dm-rec-card--pending]="rec.status === 'pending'">
+                    <div class="dm-rec-card__top">
+                      <span class="dm-rec-card__stars" [attr.aria-label]="rec.rating + ' / 5'">
+                        @for (star of [1, 2, 3, 4, 5]; track star) {
+                          <i [class.is-on]="star <= rec.rating">★</i>
+                        }
+                      </span>
+                      <span
+                        class="dm-rec-card__status"
+                        [class.is-pending]="rec.status === 'pending'"
+                      >
+                        {{ i18n.t(rec.status === 'pending' ? 'profile.recommendationPending' : 'profile.recommendationPublished') }}
+                      </span>
+                    </div>
+                    <blockquote>{{ i18n.loc(rec.quote) }}</blockquote>
+                    <div class="dm-rec-card__author">
+                      <ui-avatar [src]="rec.authorAvatar" [name]="rec.authorName" size="md" shape="circle" />
+                      <div>
+                        <strong>{{ rec.authorName }}</strong>
+                        <span>{{ i18n.loc(rec.authorRole) }} · {{ rec.organization }}</span>
+                        <small>{{ i18n.loc(rec.relation) }} · {{ date(rec.date) }}</small>
+                      </div>
+                    </div>
+                  </article>
+                }
+              </div>
+            } @else {
+              <div class="dm-empty">
+                <svg lucideHeart aria-hidden="true"></svg>
+                <h3>{{ i18n.t('profile.noRecommendations') }}</h3>
+                <p>{{ i18n.t('profile.recommendationsEmptyBody') }}</p>
+                <button ui-button intent="primary" (click)="openRecommendationRequest()">
+                  {{ i18n.t('profile.requestRecommendation') }}
+                </button>
+              </div>
+            }
+          </div>
+        } @else if (tab() === 'wishes') {
+          <div
+            class="dm-profile-tab-panel"
+            role="tabpanel"
+            id="profile-panel-wishes"
+            aria-labelledby="profile-tab-wishes"
+          >
+            <div class="dm-profile-tab-panel__head">
+              <div>
+                <p class="dm-eyebrow">{{ i18n.t('common.wishes') }}</p>
+                <h2>{{ i18n.t('wishes.title') }}</h2>
+                <p>{{ i18n.t('wishes.sub') }}</p>
+              </div>
+              <a ui-button intent="primary" routerLink="/deseos">
+                <svg lucidePencil aria-hidden="true"></svg>
+                {{ i18n.t('profile.goToWishes') }}
+              </a>
+            </div>
+
+            @if (wishlist(); as wishes) {
+              <div class="dm-profile-wishes">
+                <section class="dm-profile-wish-block">
+                  <span class="dm-profile-wish-block__label">{{ i18n.t('wishes.roles') }}</span>
+                  <div class="dm-detail__chips">
+                    @for (role of wishes.roles; track role) {
+                      <span class="dm-tag dm-tag--standard">{{ roleLabel(role) }}</span>
+                    } @empty {
+                      <span class="dm-profile-wish-empty">{{ i18n.t('common.all') }}</span>
+                    }
+                  </div>
+                </section>
+                <section class="dm-profile-wish-block">
+                  <span class="dm-profile-wish-block__label">{{ i18n.t('wishes.regions') }}</span>
+                  <div class="dm-detail__chips">
+                    @for (region of wishes.regions; track region) {
+                      <span class="dm-tag dm-tag--sand">{{ regionLabel(region) }}</span>
+                    } @empty {
+                      <span class="dm-profile-wish-empty">{{ i18n.t('common.all') }}</span>
+                    }
+                  </div>
+                </section>
+                <section class="dm-profile-wish-block">
+                  <span class="dm-profile-wish-block__label">{{ i18n.t('wishes.countries') }}</span>
+                  <div class="dm-detail__chips">
+                    @for (country of wishes.countries; track country) {
+                      <span class="dm-tag dm-tag--ghost">{{ countryName(country) }}</span>
+                    } @empty {
+                      <span class="dm-profile-wish-empty">{{ i18n.t('common.all') }}</span>
+                    }
+                  </div>
+                </section>
+                <section class="dm-profile-wish-block">
+                  <span class="dm-profile-wish-block__label">{{ i18n.t('wishes.contractTypes') }}</span>
+                  <div class="dm-detail__chips">
+                    @for (contract of wishes.contractTypes; track contract) {
+                      <span class="dm-tag dm-tag--ghost">{{ contractLabel(contract) }}</span>
+                    } @empty {
+                      <span class="dm-profile-wish-empty">{{ i18n.t('common.all') }}</span>
+                    }
+                  </div>
+                </section>
+                <section class="dm-profile-wish-block">
+                  <span class="dm-profile-wish-block__label">{{ i18n.t('wishes.availability') }}</span>
+                  <strong>{{ i18n.formatDateRange(wishes.availability.from, wishes.availability.to) }}</strong>
+                </section>
+                <section class="dm-profile-wish-block">
+                  <span class="dm-profile-wish-block__label">{{ i18n.t('wishes.alerts') }}</span>
+                  <strong>{{ wishes.alerts ? i18n.t('common.available') : i18n.t('common.notAvailable') }}</strong>
+                </section>
+              </div>
+            }
+          </div>
+        } @else if (tab() === 'documents') {
+          <div
+            class="dm-profile-tab-panel"
+            role="tabpanel"
+            id="profile-panel-documents"
+            aria-labelledby="profile-tab-documents"
+          >
+            <div class="dm-profile-tab-panel__head">
+              <div>
+                <p class="dm-eyebrow">{{ i18n.t('common.documents') }}</p>
+                <h2>{{ i18n.t('profile.documentsTitle') }}</h2>
+                <p>{{ i18n.t('profile.documentsBody') }}</p>
+              </div>
+              <button ui-button variant="outline" intent="neutral" (click)="uploadDocument()">
+                <svg lucidePlus aria-hidden="true"></svg>
+                {{ i18n.t('profile.uploadDocument') }}
+              </button>
+            </div>
+
+            <div class="dm-doc-list">
+              @for (document of p.documents; track document.id) {
+                <article class="dm-doc-row">
+                  <div class="dm-doc-row__icon">
+                    <svg lucideFileText aria-hidden="true"></svg>
+                  </div>
+                  <div class="dm-doc-row__main">
+                    <strong>{{ document.name }}</strong>
+                    <span>
+                      @if (document.expiresAt) {
+                        {{ i18n.t('profile.documentExpires', { date: date(document.expiresAt) }) }}
+                      } @else {
+                        {{ i18n.t('profile.uploadHint') }}
+                      }
+                    </span>
+                  </div>
+                  <span class="dm-doc-status" [class]="'dm-doc-status ' + documentStatus(document.status).cls">
+                    {{ i18n.t(documentStatus(document.status).label) }}
+                  </span>
+                </article>
+              }
+            </div>
+            <p class="dm-profile-doc-note">
+              <svg lucideShieldCheck aria-hidden="true"></svg>
+              {{ i18n.t('profile.documentsVerifyNote') }}
+            </p>
+          </div>
+        } @else if (tab() === 'applications') {
+          <div
+            class="dm-profile-tab-panel"
+            role="tabpanel"
+            id="profile-panel-applications"
+            aria-labelledby="profile-tab-applications"
+          >
+            <div class="dm-profile-tab-panel__head">
+              <div>
+                <p class="dm-eyebrow">{{ i18n.t('common.applications') }}</p>
+                <h2>{{ i18n.t('applications.title') }}</h2>
+                <p>{{ i18n.t('profile.applicationsSub') }}</p>
+              </div>
+              <a ui-button variant="outline" intent="neutral" routerLink="/postulaciones">
+                {{ i18n.t('profile.viewApplications') }}
+                <svg lucideArrowUpRight aria-hidden="true"></svg>
+              </a>
+            </div>
+
+            @if (recentApplications().length) {
+              <div class="dm-profile-apps">
+                @for (application of recentApplications(); track application.id) {
+                  @let mission = applicationMission(application);
+                  <article class="dm-profile-app">
+                    <div class="dm-profile-app__main">
+                      <span class="dm-profile-app__org">{{ orgName(mission?.orgId) || i18n.t('common.applications') }}</span>
+                      <h3>
+                        @if (mission) {
+                          <a [routerLink]="['/misiones', mission.slug]">{{ i18n.loc(mission.title) }}</a>
+                        } @else {
+                          {{ application.missionId }}
+                        }
+                      </h3>
+                      <span>{{ i18n.t('applications.updatedOn', { date: date(application.updatedAt) }) }}</span>
+                    </div>
+                    <span class="dm-app-status" [class]="'dm-app-status dm-app-status--' + application.status">
+                      {{ statusLabel(application.status) }}
+                    </span>
+                  </article>
+                }
+              </div>
+            } @else {
+              <div class="dm-empty">
+                <h3>{{ i18n.t('profile.noApplicationsTitle') }}</h3>
+                <p>{{ i18n.t('profile.noApplicationsBody') }}</p>
+                <a ui-button intent="primary" routerLink="/misiones">{{ i18n.t('common.exploreMissions') }}</a>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </article>
+
+  @if (requestOpen()) {
+    <div class="dm-profile-modal-backdrop" (click)="closeRecommendationRequest()">
+      <div
+        class="dm-profile-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="recommendation-modal-title"
+        (click)="$event.stopPropagation()"
+      >
+        <header class="dm-profile-modal__head">
+          <div>
+            <p class="dm-eyebrow">{{ i18n.t('common.recommendations') }}</p>
+            <h2 id="recommendation-modal-title">{{ i18n.t('profile.requestModalTitle') }}</h2>
+            <p>{{ i18n.t('profile.requestModalSub') }}</p>
+          </div>
+          <button type="button" class="dm-profile-modal__close" [attr.aria-label]="i18n.t('common.close')" (click)="closeRecommendationRequest()">
+            <svg lucideX aria-hidden="true"></svg>
+          </button>
+        </header>
+
+        @if (requestError()) {
+          <p class="dm-profile-modal__error" role="alert">{{ i18n.t(requestError()!) }}</p>
+        }
+
+        <div class="dm-profile-modal__form">
+          <label class="dm-profile-field">
+            <span>{{ i18n.t('common.name') }} *</span>
+            <input
+              type="text"
+              [value]="requestDraft().authorName"
+              (input)="updateRequest('authorName', $any($event.target).value)"
+            />
+          </label>
+          <label class="dm-profile-field">
+            <span>{{ i18n.t('common.email') }} *</span>
+            <input
+              type="email"
+              [value]="requestDraft().authorEmail"
+              (input)="updateRequest('authorEmail', $any($event.target).value)"
+            />
+          </label>
+          <label class="dm-profile-field">
+            <span>{{ i18n.t('profile.organization') }}</span>
+            <input
+              type="text"
+              [value]="requestDraft().organization"
+              [placeholder]="i18n.t('profile.requestOrganizationPlaceholder')"
+              (input)="updateRequest('organization', $any($event.target).value)"
+            />
+          </label>
+          <label class="dm-profile-field dm-profile-field--wide">
+            <span>{{ i18n.t('profile.message') }} *</span>
+            <textarea
+              rows="4"
+              [value]="requestDraft().message"
+              [placeholder]="i18n.t('profile.requestMessagePlaceholder')"
+              (input)="updateRequest('message', $any($event.target).value)"
+            ></textarea>
+          </label>
+        </div>
+
+        <footer class="dm-profile-modal__actions">
+          <button ui-button variant="ghost" intent="neutral" type="button" (click)="closeRecommendationRequest()">
+            {{ i18n.t('common.cancel') }}
+          </button>
+          <button ui-button intent="primary" type="button" [disabled]="requesting()" (click)="submitRecommendationRequest()">
+            {{ i18n.t('profile.requestSend') }}
+          </button>
+        </footer>
+      </div>
+    </div>
+  }
+} @else {
+  <section class="dm-page">
+    <div class="dm-container">
+      <div class="dm-empty">
+        <h1>{{ i18n.t('profile.title') }}</h1>
+        <p>{{ i18n.t('common.error') }}</p>
+        <button ui-button intent="primary" type="button" (click)="store.reload()">{{ i18n.t('common.retry') }}</button>
+      </div>
+    </div>
+  </section>
+}

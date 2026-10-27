@@ -1,0 +1,12 @@
+.dm-org-mark {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  border-radius: 1px;
+  color: #fff;
+  font-family: var(--dm-font-ui);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%);
+}

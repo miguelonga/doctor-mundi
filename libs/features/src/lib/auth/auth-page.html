@@ -1,0 +1,121 @@
+<div class="dm-auth">
+  <div class="dm-auth__panel">
+    <header class="dm-auth__top">
+      <a class="dm-auth__brand" routerLink="/" [attr.aria-label]="i18n.t('app.name')">
+        <dm-logo />
+      </a>
+      <div class="dm-auth__top-actions">
+        <dm-language-switcher />
+        <a class="dm-auth__close" routerLink="/" [attr.aria-label]="i18n.t('common.goHome')">
+          <svg lucideX aria-hidden="true"></svg>
+        </a>
+      </div>
+    </header>
+
+    <main class="dm-auth__main">
+      <div class="dm-auth__form-wrap">
+        <p class="dm-eyebrow">{{ i18n.t('app.atlas') }}</p>
+        <h1>{{ i18n.t(isRegister() ? 'auth.registerTitle' : 'auth.loginTitle') }}</h1>
+        <p class="dm-auth__sub">
+          {{ i18n.t(isRegister() ? 'auth.registerSub' : 'auth.loginSub') }}
+        </p>
+
+        @if (returnUrl()) {
+          <div class="dm-auth__return">
+            <svg lucideArrowLeft aria-hidden="true"></svg>
+            {{ i18n.t('auth.returnNote') }}
+          </div>
+        }
+
+        @if (error()) {
+          <div class="dm-auth__error" role="alert">
+            {{ i18n.t(error()!) }}
+          </div>
+        }
+
+        <tf-form
+          class="dm-auth__form"
+          [config]="config()"
+          [model]="model()"
+          (valueChange)="onValueChange($event)"
+          (formSubmit)="submit($event)"
+        />
+
+        <div class="dm-auth__assist">
+          @if (!isRegister()) {
+            <button type="button" class="dm-auth__text-link" (click)="forgot()">
+              {{ i18n.t('auth.forgot') }}
+            </button>
+          }
+          <span class="dm-auth__switch">
+            {{ i18n.t(isRegister() ? 'auth.hasAccount' : 'auth.noAccount') }}
+            <a [routerLink]="switchHref(isRegister() ? 'login' : 'register')" [queryParams]="switchQuery()">
+              {{ i18n.t(isRegister() ? 'auth.loginButton' : 'auth.registerButton') }}
+            </a>
+          </span>
+        </div>
+
+        @if (!isRegister()) {
+          <div class="dm-auth__divider"><span>{{ i18n.t('auth.or') }}</span></div>
+
+          <div class="dm-auth__demo">
+            <div class="dm-auth__demo-head">
+              <svg lucideBadgeCheck aria-hidden="true"></svg>
+              <strong>{{ i18n.t('common.demo') }}</strong>
+            </div>
+            <p>{{ i18n.t('auth.demoHint') }}</p>
+            <code>{{ i18n.t('auth.demoCredentials') }}</code>
+            <button
+              ui-button
+              type="button"
+              variant="outline"
+              intent="neutral"
+              block
+              [disabled]="submitting()"
+              (click)="loginAsDemo()"
+            >
+              {{ i18n.t('auth.demoButton') }}
+            </button>
+          </div>
+        }
+
+        <p class="dm-auth__legal">
+          {{ i18n.t('auth.terms') }}
+        </p>
+      </div>
+    </main>
+  </div>
+
+  <aside class="dm-auth__side">
+    <div class="dm-auth__side-image" aria-hidden="true"></div>
+    <div class="dm-auth__side-overlay" aria-hidden="true"></div>
+    <div class="dm-auth__side-content">
+      <div class="dm-auth__side-mark">
+        <dm-logo />
+      </div>
+      <div class="dm-auth__side-copy">
+        <p class="dm-eyebrow">{{ i18n.t('landing.heroEyebrow') }}</p>
+        <h2>{{ i18n.t('auth.sideTitle') }}</h2>
+        <p>{{ i18n.t('auth.sideBody') }}</p>
+      </div>
+      <div class="dm-auth__side-stats">
+        <div>
+          <strong>{{ stats().openMissions }}</strong>
+          <span>{{ i18n.t('landing.statsMissions') }}</span>
+        </div>
+        <div>
+          <strong>{{ stats().countries }}</strong>
+          <span>{{ i18n.t('landing.statsCountries') }}</span>
+        </div>
+        <div>
+          <strong>{{ stats().organizations }}</strong>
+          <span>{{ i18n.t('landing.statsOrganizations') }}</span>
+        </div>
+      </div>
+      <p class="dm-auth__side-note">
+        <svg lucideMapPin aria-hidden="true"></svg>
+        {{ i18n.t('auth.sideNote') }}
+      </p>
+    </div>
+  </aside>
+</div>

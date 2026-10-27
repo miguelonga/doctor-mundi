@@ -1,0 +1,332 @@
+<section class="dm-page dm-wishes">
+  <div class="dm-container">
+    <header class="dm-page-head dm-wishes__head">
+      <div class="dm-page-head__copy">
+        <p class="dm-eyebrow">{{ i18n.t('common.wishes') }}</p>
+        <h1>{{ i18n.t('wishes.title') }}</h1>
+        <p class="dm-page-head__sub">{{ i18n.t('wishes.sub') }}</p>
+      </div>
+      <div class="dm-page-head__actions dm-wishes__head-actions">
+        @if (dirty()) {
+          <span class="dm-wishes__dirty">{{ i18n.t('wishes.unsaved') }}</span>
+        }
+        <button
+          ui-button
+          intent="primary"
+          type="button"
+          [disabled]="!draft() || !dirty() || saving() || dateInvalid()"
+          (click)="save()"
+        >
+          <svg lucideSave aria-hidden="true"></svg>
+          {{ i18n.t('wishes.save') }}
+        </button>
+      </div>
+    </header>
+
+    @if (loading() && !draft()) {
+      <div class="dm-wishes__skeleton">
+        <div class="dm-skeleton"></div>
+        <div class="dm-skeleton"></div>
+      </div>
+    } @else if (draft(); as wishes) {
+      <div class="dm-wishes__layout">
+        <main class="dm-wishes__editor">
+          <section class="dm-wishes-panel">
+            <div class="dm-wishes-panel__head">
+              <div>
+                <p class="dm-eyebrow">01 · {{ i18n.t('common.role') }}</p>
+                <h2>{{ i18n.t('wishes.roles') }}</h2>
+              </div>
+              <span>{{ i18n.t('wishes.selected', { count: wishes.roles.length }) }}</span>
+            </div>
+            <div class="dm-chip-row">
+              @for (role of roleOptions; track role) {
+                <button
+                  type="button"
+                  class="dm-chip"
+                  [attr.aria-pressed]="wishes.roles.includes(role)"
+                  (click)="toggleRole(role)"
+                >
+                  @if (wishes.roles.includes(role)) {
+                    <svg lucideCheck aria-hidden="true"></svg>
+                  }
+                  {{ roleName(role) }}
+                </button>
+              }
+            </div>
+          </section>
+
+          <section class="dm-wishes-panel">
+            <div class="dm-wishes-panel__head">
+              <div>
+                <p class="dm-eyebrow">02 · {{ i18n.t('common.region') }}</p>
+                <h2>{{ i18n.t('wishes.regions') }}</h2>
+              </div>
+              <span>{{ i18n.t('wishes.selected', { count: wishes.regions.length }) }}</span>
+            </div>
+            <div class="dm-chip-row">
+              @for (region of regionOptions; track region) {
+                <button
+                  type="button"
+                  class="dm-chip"
+                  [attr.aria-pressed]="wishes.regions.includes(region)"
+                  (click)="toggleRegion(region)"
+                >
+                  @if (wishes.regions.includes(region)) {
+                    <svg lucideCheck aria-hidden="true"></svg>
+                  }
+                  {{ regionName(region) }}
+                </button>
+              }
+            </div>
+          </section>
+
+          <section class="dm-wishes-panel">
+            <div class="dm-wishes-panel__head">
+              <div>
+                <p class="dm-eyebrow">03 · {{ i18n.t('common.country') }}</p>
+                <h2>{{ i18n.t('wishes.countries') }}</h2>
+              </div>
+              <span>{{ i18n.t('wishes.selected', { count: wishes.countries.length }) }}</span>
+            </div>
+            <div class="dm-wishes-search">
+              <svg lucideSearch aria-hidden="true"></svg>
+              <ui-input
+                type="search"
+                [value]="countryQuery()"
+                [placeholder]="i18n.t('wishes.searchCountry')"
+                [attr.aria-label]="i18n.t('wishes.searchCountry')"
+                (valueChange)="countryQuery.set($event)"
+              />
+            </div>
+            <div class="dm-chip-row dm-wishes__country-row">
+              @for (country of countryOptions(); track country.code) {
+                <button
+                  type="button"
+                  class="dm-chip dm-chip--compact"
+                  [attr.aria-pressed]="wishes.countries.includes(country.code)"
+                  (click)="toggleCountry(country.code)"
+                >
+                  @if (wishes.countries.includes(country.code)) {
+                    <svg lucideCheck aria-hidden="true"></svg>
+                  }
+                  {{ country.name }}
+                </button>
+              } @empty {
+                <p class="dm-wishes__hint">{{ i18n.t('common.noResults') }}</p>
+              }
+            </div>
+            @if (!wishes.countries.length) {
+              <p class="dm-wishes__hint">{{ i18n.t('wishes.anyCountry') }}</p>
+            }
+          </section>
+
+          <section class="dm-wishes-panel">
+            <div class="dm-wishes-panel__head">
+              <div>
+                <p class="dm-eyebrow">04 · {{ i18n.t('common.contract') }}</p>
+                <h2>{{ i18n.t('wishes.contractTypes') }}</h2>
+              </div>
+              <span>{{ i18n.t('wishes.selected', { count: wishes.contractTypes.length }) }}</span>
+            </div>
+            <div class="dm-chip-row">
+              @for (contract of contractOptions; track contract) {
+                <button
+                  type="button"
+                  class="dm-chip"
+                  [attr.aria-pressed]="wishes.contractTypes.includes(contract)"
+                  (click)="toggleContract(contract)"
+                >
+                  @if (wishes.contractTypes.includes(contract)) {
+                    <svg lucideCheck aria-hidden="true"></svg>
+                  }
+                  {{ contractName(contract) }}
+                </button>
+              }
+            </div>
+          </section>
+
+          <section class="dm-wishes-panel dm-wishes-dates">
+            <div class="dm-wishes-panel__head">
+              <div>
+                <p class="dm-eyebrow">05 · {{ i18n.t('common.availability') }}</p>
+                <h2>{{ i18n.t('wishes.availability') }}</h2>
+              </div>
+            </div>
+            <div class="dm-wishes-dates__fields">
+              <label>
+                <span>{{ i18n.t('common.from') }}</span>
+                <input
+                  type="date"
+                  class="dm-date-input"
+                  [value]="wishes.availability.from"
+                  (input)="setDate('from', $any($event.target).value)"
+                />
+              </label>
+              <label>
+                <span>{{ i18n.t('common.to') }}</span>
+                <input
+                  type="date"
+                  class="dm-date-input"
+                  [value]="wishes.availability.to"
+                  (input)="setDate('to', $any($event.target).value)"
+                />
+              </label>
+            </div>
+            @if (dateInvalid()) {
+              <p class="dm-wishes__error">{{ i18n.t('wishes.dateError') }}</p>
+            }
+          </section>
+
+          <section class="dm-wishes-panel dm-wishes-alerts">
+            <div class="dm-wishes-alerts__copy">
+              <span class="dm-wishes-alerts__icon">
+                <svg lucideBell aria-hidden="true"></svg>
+              </span>
+              <div>
+                <h2>{{ i18n.t('wishes.alerts') }}</h2>
+                <p>{{ i18n.t('wishes.alertsBody') }}</p>
+              </div>
+            </div>
+            <label class="dm-wishes-alerts__toggle">
+              <span>{{ wishes.alerts ? i18n.t('wishes.alertsOn') : i18n.t('wishes.alertsOff') }}</span>
+              <ui-checkbox
+                [checked]="wishes.alerts"
+                [attr.aria-label]="i18n.t('wishes.alerts')"
+                (checkedChange)="setAlerts($event)"
+              ></ui-checkbox>
+            </label>
+          </section>
+        </main>
+
+        <aside class="dm-wishes__aside">
+          <div class="dm-wishes-summary">
+            <div class="dm-wishes-summary__head">
+              <p class="dm-eyebrow">{{ i18n.t('common.wishes') }}</p>
+              <h2>{{ i18n.t('wishes.summary') }}</h2>
+              <p>{{ i18n.t('wishes.summarySub') }}</p>
+            </div>
+            <div class="dm-wishes-summary__rows">
+              <div>
+                <span>{{ i18n.t('wishes.rolesCount') }}</span>
+                <strong>{{ wishes.roles.length || i18n.t('wishes.anyRole') }}</strong>
+              </div>
+              <div>
+                <span>{{ i18n.t('wishes.regionsCount') }}</span>
+                <strong>{{ wishes.regions.length || i18n.t('wishes.anyRegion') }}</strong>
+              </div>
+              <div>
+                <span>{{ i18n.t('wishes.countriesCount') }}</span>
+                <strong>{{ wishes.countries.length || i18n.t('wishes.anyCountry') }}</strong>
+              </div>
+              <div>
+                <span>{{ i18n.t('wishes.contractsCount') }}</span>
+                <strong>{{ wishes.contractTypes.length || i18n.t('wishes.anyContract') }}</strong>
+              </div>
+            </div>
+            <div class="dm-wishes-summary__dates">
+              <span>{{ i18n.t('wishes.availability') }}</span>
+              <strong>{{ i18n.formatDateRange(wishes.availability.from, wishes.availability.to) }}</strong>
+            </div>
+            <button
+              ui-button
+              intent="primary"
+              type="button"
+              block
+              [disabled]="!dirty() || saving() || dateInvalid()"
+              (click)="save()"
+            >
+              <svg lucideSave aria-hidden="true"></svg>
+              {{ i18n.t('wishes.save') }}
+            </button>
+            <button type="button" class="dm-wishes-summary__clear" (click)="clearSelection()">
+              {{ i18n.t('common.clearAll') }}
+            </button>
+          </div>
+
+          <div class="dm-wishes-tip">
+            <svg lucideSparkles aria-hidden="true"></svg>
+            <p>{{ i18n.t('profile.scoreHint') }}</p>
+          </div>
+        </aside>
+      </div>
+
+      <section class="dm-wishes-section">
+        <div class="dm-wishes-section__head">
+          <div>
+            <p class="dm-eyebrow">{{ i18n.t('common.match') }}</p>
+            <h2>{{ i18n.t('wishes.recommendedTitle') }}</h2>
+            <p>{{ i18n.t('wishes.recommendedSub') }}</p>
+          </div>
+          <a class="dm-link-arrow" routerLink="/misiones">
+            {{ i18n.t('common.exploreMissions') }}
+            <svg lucideMapPin aria-hidden="true"></svg>
+          </a>
+        </div>
+
+        @if (recommended().length) {
+          <div class="dm-wishes-grid">
+            @for (mission of recommended(); track mission.id) {
+              @if (organizationFor(mission); as org) {
+                <div class="dm-wishes-card-wrap">
+                  <span class="dm-wishes-reason">
+                    <svg lucideSparkles aria-hidden="true"></svg>
+                    {{ reasonText(mission) }}
+                  </span>
+                  <dm-mission-card
+                    [mission]="mission"
+                    [organization]="org"
+                    [match]="matchFor(mission)"
+                    [saved]="saved.isSaved(mission.id)"
+                    (saveToggle)="onSave($event)"
+                  />
+                </div>
+              }
+            }
+          </div>
+        } @else {
+          <div class="dm-empty">
+            <h3>{{ i18n.t('common.noResults') }}</h3>
+            <p>{{ i18n.t('wishes.recommendedSub') }}</p>
+          </div>
+        }
+      </section>
+
+      <section class="dm-wishes-section dm-wishes-section--saved">
+        <div class="dm-wishes-section__head">
+          <div>
+            <p class="dm-eyebrow">{{ i18n.t('common.saved') }}</p>
+            <h2>{{ i18n.t('wishes.savedTitle') }}</h2>
+          </div>
+        </div>
+        @if (savedMissions().length) {
+          <div class="dm-wishes-grid">
+            @for (mission of savedMissions(); track mission.id) {
+              @if (organizationFor(mission); as org) {
+                <dm-mission-card
+                  [mission]="mission"
+                  [organization]="org"
+                  [match]="matchFor(mission)"
+                  [saved]="true"
+                  (saveToggle)="onSave($event)"
+                />
+              }
+            }
+          </div>
+        } @else {
+          <div class="dm-empty">
+            <svg lucideHeart aria-hidden="true"></svg>
+            <h3>{{ i18n.t('wishes.savedEmpty') }}</h3>
+            <p>{{ i18n.t('wishes.savedEmptyBody') }}</p>
+            <a ui-button routerLink="/misiones" variant="outline" intent="neutral">{{ i18n.t('common.exploreMissions') }}</a>
+          </div>
+        }
+      </section>
+    } @else {
+      <div class="dm-empty">
+        <h2>{{ i18n.t('wishes.title') }}</h2>
+        <p>{{ i18n.t('common.error') }}</p>
+      </div>
+    }
+  </div>
+</section>

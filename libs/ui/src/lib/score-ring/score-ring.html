@@ -1,0 +1,16 @@
+<svg class="dm-score__svg" viewBox="0 0 120 120" aria-hidden="true">
+  <circle class="dm-score__track" cx="60" cy="60" [attr.r]="radius" />
+  <circle
+    class="dm-score__value"
+    cx="60"
+    cy="60"
+    [attr.r]="radius"
+    [attr.stroke]="color()"
+    [attr.stroke-dasharray]="circumference"
+    [attr.stroke-dashoffset]="offset()"
+  />
+</svg>
+<span class="dm-score__body">
+  <span class="dm-score__number">{{ score() }}</span>
+  <span class="dm-score__label">{{ i18n.t('score.outOf') }}</span>
+</span>

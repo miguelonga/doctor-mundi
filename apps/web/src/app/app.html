@@ -1,0 +1,16 @@
+<a class="dm-skip-link" href="#main">{{ i18n.t('nav.skip') }}</a>
+
+@if (!minimal()) {
+  <dm-site-header />
+}
+
+<main id="main" [class.dm-main--chrome]="!minimal()" tabindex="-1">
+  <router-outlet />
+</main>
+
+@if (!minimal()) {
+  <dm-site-footer />
+  <dm-mobile-tabbar />
+}
+
+<dm-toast-host />

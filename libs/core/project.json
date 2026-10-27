@@ -1,0 +1,12 @@
+{
+  "name": "core",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/core/src",
+  "prefix": "dm",
+  "projectType": "library",
+  "tags": [
+    "type:core"
+  ],
+  "// targets": "to see all targets run: nx show project core --web",
+  "targets": {}
+}

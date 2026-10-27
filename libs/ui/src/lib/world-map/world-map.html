@@ -1,0 +1,29 @@
+<div class="dm-map" [style.height]="height">
+  <div
+    #map
+    class="dm-map__canvas"
+    role="region"
+    [attr.aria-label]="i18nPublic.t('explore.mapView')"
+  ></div>
+
+  @if (!missions.length) {
+    <div class="dm-map__empty">
+      <p class="dm-eyebrow">{{ i18nPublic.t('explore.mapView') }}</p>
+      <p>{{ i18nPublic.t('common.noResults') }}</p>
+    </div>
+  }
+
+  <div class="dm-map__legend" aria-hidden="true">
+    <span><i class="critical"></i>{{ i18nPublic.t('urgency.critical') }}</span>
+    <span><i class="high"></i>{{ i18nPublic.t('urgency.high') }}</span>
+    <span><i class="standard"></i>{{ i18nPublic.t('urgency.standard') }}</span>
+  </div>
+</div>
+
+<ul class="dm-sr-only">
+  @for (mission of missions; track mission.id) {
+    <li>
+      <a [routerLink]="['/misiones', mission.slug]">{{ missionLabel(mission) }}</a>
+    </li>
+  }
+</ul>

@@ -1,0 +1,79 @@
+:host {
+  display: block;
+}
+
+.dm-map {
+  position: relative;
+  width: 100%;
+  background: var(--dm-map-water);
+  overflow: hidden;
+}
+
+.dm-map__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.dm-map__empty {
+  position: absolute;
+  inset: 0;
+  z-index: 400;
+  display: grid;
+  place-content: center;
+  gap: 0.35rem;
+  text-align: center;
+  background-color: var(--dm-paper-raised);
+  background-image: url('/textures/topo.svg');
+  background-size: 900px auto;
+  color: var(--dm-ink-muted);
+}
+
+.dm-map__legend {
+  position: absolute;
+  left: 0.85rem;
+  bottom: 0.85rem;
+  z-index: 500;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.8rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--dm-rule);
+  background: color-mix(in srgb, var(--dm-paper-raised) 92%, transparent);
+  backdrop-filter: blur(8px);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dm-ink-muted);
+}
+
+.dm-map__legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.dm-map__legend i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--dm-petrol-600);
+}
+
+.dm-map__legend i.critical {
+  background: var(--dm-signal);
+}
+
+.dm-map__legend i.high {
+  background: var(--dm-sand-500);
+}
+
+.dm-map__legend i.standard {
+  background: var(--dm-petrol-500);
+}
+
+.dm-map-marker-wrap {
+  background: transparent;
+  border: 0;
+}

@@ -1,0 +1,6 @@
+<div class="dm-lang" role="group" [attr.aria-label]="i18n.t('nav.language')">
+  <svg lucideLanguages class="dm-lang__icon" aria-hidden="true"></svg>
+  <button type="button" [attr.aria-pressed]="i18n.isEs()" (click)="set('es')">ES</button>
+  <span class="dm-lang__sep" aria-hidden="true">/</span>
+  <button type="button" [attr.aria-pressed]="!i18n.isEs()" (click)="set('en')">EN</button>
+</div>

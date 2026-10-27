@@ -1,0 +1,130 @@
+<section class="dm-page dm-how">
+  <div class="dm-container">
+    <header class="dm-how__head">
+      <div class="dm-how__head-copy">
+        <p class="dm-eyebrow">{{ i18n.t('app.atlas') }}</p>
+        <h1>{{ i18n.t('how.title') }}</h1>
+        <p class="dm-how__sub">{{ i18n.t('how.sub') }}</p>
+      </div>
+      <div class="dm-how__stamp" aria-hidden="true">
+        <span>DM</span>
+        <small>FIELD<br />MANUAL</small>
+      </div>
+    </header>
+
+    <div class="dm-how__audience" role="tablist" [attr.aria-label]="i18n.t('how.title')">
+      <button
+        type="button"
+        role="tab"
+        [attr.aria-selected]="audience() === 'volunteer'"
+        [class.is-active]="audience() === 'volunteer'"
+        (click)="select('volunteer')"
+      >
+        <svg lucideBookOpen aria-hidden="true"></svg>
+        {{ i18n.t('how.volunteers') }}
+      </button>
+      <button
+        type="button"
+        role="tab"
+        [attr.aria-selected]="audience() === 'organization'"
+        [class.is-active]="audience() === 'organization'"
+        (click)="select('organization')"
+      >
+        <svg lucideSparkles aria-hidden="true"></svg>
+        {{ i18n.t('how.organizations') }}
+      </button>
+    </div>
+
+    <div class="dm-how__steps" role="tabpanel">
+      @for (step of steps(); track step.number) {
+        <article class="dm-how-step">
+          <div class="dm-how-step__mark">
+            <span>{{ step.number }}</span>
+            <i aria-hidden="true"></i>
+          </div>
+          <p class="dm-how-step__label">
+            {{ i18n.t('how.stepLabel', { number: step.number }) }}
+          </p>
+          <h2>{{ step.title }}</h2>
+          <p>{{ step.body }}</p>
+        </article>
+      }
+    </div>
+
+    <section class="dm-how-verify" id="verificacion">
+      <div class="dm-how-verify__copy">
+        <p class="dm-eyebrow">{{ i18n.t('common.verified') }}</p>
+        <h2>{{ i18n.t('how.verificationTitle') }}</h2>
+        <p>{{ i18n.t('how.verificationBody') }}</p>
+        <a class="dm-link-arrow" routerLink="/organizaciones">
+          {{ i18n.t('nav.organizations') }}
+          <svg lucideArrowUpRight aria-hidden="true"></svg>
+        </a>
+      </div>
+      <div class="dm-how-verify__panel">
+        <div class="dm-how-verify__seal">
+          <svg lucideShieldCheck aria-hidden="true"></svg>
+          <span>{{ i18n.t('common.verified') }}</span>
+        </div>
+        <ul>
+          @for (check of checks; track check; let index = $index) {
+            <li>
+              <span class="dm-how-verify__icon">
+                @if (index === 0) {
+                  <svg lucideFileCheck2 aria-hidden="true"></svg>
+                } @else if (index === 1) {
+                  <svg lucideCheck aria-hidden="true"></svg>
+                } @else {
+                  <svg lucideRefreshCw aria-hidden="true"></svg>
+                }
+              </span>
+              {{ i18n.t(check) }}
+            </li>
+          }
+        </ul>
+      </div>
+    </section>
+
+    <section class="dm-how-faq">
+      <div class="dm-how-faq__head">
+        <p class="dm-eyebrow">{{ i18n.t('landing.faqEyebrow') }}</p>
+        <h2>{{ i18n.t('how.faqTitle') }}</h2>
+      </div>
+      <div class="dm-how-faq__list">
+        @for (faq of faqs; track faq.q) {
+          <details class="dm-how-faq__item">
+            <summary>
+              <span>{{ i18n.t(faq.q) }}</span>
+              <svg lucidePlus aria-hidden="true"></svg>
+            </summary>
+            <p>{{ i18n.t(faq.a) }}</p>
+          </details>
+        }
+      </div>
+    </section>
+
+    <section class="dm-how-cta">
+      <div>
+        <p class="dm-eyebrow">{{ i18n.t('app.atlas') }}</p>
+        <h2>{{ ctaTitle() }}</h2>
+        <p>{{ ctaBody() }}</p>
+      </div>
+      <div class="dm-how-cta__actions">
+        @if (audience() === 'organization') {
+          <a ui-button intent="primary" [href]="ctaRoute()">
+            {{ ctaLabel() }}
+            <svg lucideArrowUpRight aria-hidden="true"></svg>
+          </a>
+        } @else {
+          <a ui-button intent="primary" [routerLink]="ctaRoute()">
+            {{ ctaLabel() }}
+            <svg lucideArrowRight aria-hidden="true"></svg>
+          </a>
+        }
+        <a ui-button variant="ghost" intent="neutral" routerLink="/misiones">
+          {{ i18n.t('landing.ctaSecondary') }}
+        </a>
+      </div>
+    </section>
+  </div>
+</section>

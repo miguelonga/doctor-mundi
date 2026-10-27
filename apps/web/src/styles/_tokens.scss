@@ -1,0 +1,230 @@
+:root {
+  // ---------------------------------------------------------------------------
+  // Doctor Mundi · Atlas de guardia
+  // A field-atlas palette: petrol ink, paper, lagoon and signal red.
+  // ---------------------------------------------------------------------------
+
+  // Petrol (brand)
+  --dm-petrol-50: #e9f3f0;
+  --dm-petrol-100: #cfe6df;
+  --dm-petrol-200: #a6d1c5;
+  --dm-petrol-300: #74b6a7;
+  --dm-petrol-400: #3f9385;
+  --dm-petrol-500: #1f756a;
+  --dm-petrol-600: #0f5b52;
+  --dm-petrol-700: #0b4a43;
+  --dm-petrol-800: #083b36;
+  --dm-petrol-900: #062d29;
+  --dm-petrol-950: #041f1d;
+
+  // Sand / amber (accent)
+  --dm-sand-50: #fbf4e5;
+  --dm-sand-100: #f5e7c9;
+  --dm-sand-200: #ecd29d;
+  --dm-sand-300: #e0ba6d;
+  --dm-sand-400: #d5a343;
+  --dm-sand-500: #c08a2a;
+  --dm-sand-600: #a6711f;
+  --dm-sand-700: #855a1a;
+  --dm-sand-800: #654417;
+  --dm-sand-900: #4a3212;
+
+  // Signal
+  --dm-signal-50: #fcece8;
+  --dm-signal-100: #f9d4cc;
+  --dm-signal-200: #f2ada0;
+  --dm-signal-300: #e77f6e;
+  --dm-signal-400: #dc5a44;
+  --dm-signal-500: #c9442e;
+  --dm-signal-600: #a83624;
+  --dm-signal-700: #862b1e;
+  --dm-signal-800: #66231a;
+  --dm-signal-900: #4b1c16;
+
+  --dm-paper: #f2f4ec;
+  --dm-paper-deep: #e6ebdf;
+  --dm-paper-raised: #fbfcf7;
+  --dm-paper-white: #ffffff;
+  --dm-ink: #0a2422;
+  --dm-ink-soft: #36534c;
+  --dm-ink-muted: #5e746d;
+  --dm-ink-subtle: #879991;
+  --dm-rule: #cfd8c9;
+  --dm-rule-strong: #b3c2b2;
+  --dm-lagoon: #2d8c7e;
+  --dm-lagoon-soft: #dceee8;
+  --dm-signal: #c9442e;
+  --dm-signal-soft: #f9e2dc;
+  --dm-sand: #c08a2a;
+  --dm-sand-soft: #f7ecd3;
+  --dm-map-water: #d8e7e2;
+  --dm-map-land: #f4efdf;
+  --dm-map-land-alt: #eae4d2;
+  --dm-map-line: #b9cfc7;
+  --dm-shadow: 0 30px 90px -48px rgba(4, 31, 29, 0.55);
+  --dm-shadow-soft: 0 16px 40px -28px rgba(4, 31, 29, 0.35);
+
+  --dm-font-display: 'Newsreader Variable', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --dm-font-ui: 'Archivo Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --dm-font-mono: 'SFMono-Regular', ui-monospace, Menlo, monospace;
+
+  --dm-max: 1320px;
+  --dm-gutter: clamp(1.25rem, 4.2vw, 3.75rem);
+  --dm-header-h: 76px;
+  --dm-radius: 3px;
+  --dm-radius-lg: 7px;
+  --dm-cut: 16px;
+
+  // Tahoe brand seam
+  --tahoe-brand-50: var(--dm-petrol-50);
+  --tahoe-brand-100: var(--dm-petrol-100);
+  --tahoe-brand-200: var(--dm-petrol-200);
+  --tahoe-brand-300: var(--dm-petrol-300);
+  --tahoe-brand-400: var(--dm-petrol-400);
+  --tahoe-brand-500: var(--dm-petrol-500);
+  --tahoe-brand-600: var(--dm-petrol-600);
+  --tahoe-brand-700: var(--dm-petrol-700);
+  --tahoe-brand-800: var(--dm-petrol-800);
+  --tahoe-brand-900: var(--dm-petrol-900);
+  --tahoe-brand-950: var(--dm-petrol-950);
+
+  --tahoe-accent-50: var(--dm-sand-50);
+  --tahoe-accent-100: var(--dm-sand-100);
+  --tahoe-accent-200: var(--dm-sand-200);
+  --tahoe-accent-300: var(--dm-sand-300);
+  --tahoe-accent-400: var(--dm-sand-400);
+  --tahoe-accent-500: var(--dm-sand-500);
+  --tahoe-accent-600: var(--dm-sand-600);
+  --tahoe-accent-700: var(--dm-sand-700);
+  --tahoe-accent-800: var(--dm-sand-800);
+  --tahoe-accent-900: var(--dm-sand-900);
+
+  // Tahoe semantic surface
+  --tahoe-color-background: var(--dm-paper);
+  --tahoe-color-surface: var(--dm-paper-raised);
+  --tahoe-color-surface-raised: var(--dm-paper-white);
+  --tahoe-color-surface-sunken: var(--dm-paper-deep);
+  --tahoe-color-surface-hover: #e9eee3;
+  --tahoe-color-surface-active: #dfe7d9;
+  --tahoe-color-border: var(--dm-rule);
+  --tahoe-color-border-strong: var(--dm-rule-strong);
+  --tahoe-color-divider: var(--dm-rule);
+  --tahoe-color-text: var(--dm-ink);
+  --tahoe-color-text-muted: var(--dm-ink-muted);
+  --tahoe-color-text-subtle: var(--dm-ink-subtle);
+  --tahoe-color-text-inverse: var(--dm-paper-raised);
+  --tahoe-color-primary: var(--dm-petrol-600);
+  --tahoe-color-primary-hover: var(--dm-petrol-700);
+  --tahoe-color-primary-active: var(--dm-petrol-800);
+  --tahoe-color-primary-subtle: var(--dm-petrol-50);
+  --tahoe-color-primary-subtle-hover: var(--dm-petrol-100);
+  --tahoe-color-primary-text: var(--dm-petrol-700);
+  --tahoe-color-on-primary: #f8fbf7;
+  --tahoe-color-accent: var(--dm-sand-500);
+  --tahoe-color-accent-hover: var(--dm-sand-600);
+  --tahoe-color-accent-active: var(--dm-sand-700);
+  --tahoe-color-accent-subtle: var(--dm-sand-50);
+  --tahoe-color-accent-subtle-hover: var(--dm-sand-100);
+  --tahoe-color-accent-text: var(--dm-sand-700);
+  --tahoe-color-on-accent: var(--dm-petrol-950);
+  --tahoe-color-danger: var(--dm-signal);
+  --tahoe-color-danger-hover: var(--dm-signal-600);
+  --tahoe-color-danger-active: var(--dm-signal-700);
+  --tahoe-color-danger-subtle: var(--dm-signal-soft);
+  --tahoe-color-danger-subtle-hover: var(--dm-signal-100);
+  --tahoe-color-danger-text: var(--dm-signal-700);
+  --tahoe-color-on-danger: #fff8f5;
+  --tahoe-color-focus-ring: color-mix(in srgb, var(--dm-petrol-500) 42%, transparent);
+  --tahoe-color-overlay: color-mix(in srgb, var(--dm-petrol-950) 62%, transparent);
+
+  --tahoe-font-sans: var(--dm-font-ui);
+  --tahoe-font-family-base: var(--dm-font-ui);
+  --tahoe-radius-sm: 2px;
+  --tahoe-radius-md: 4px;
+  --tahoe-radius-lg: 6px;
+  --tahoe-radius-xl: 10px;
+  --tahoe-radius-2xl: 14px;
+  --tahoe-control-radius: 2px;
+
+  --ui-button-radius: 2px;
+  --ui-button-font-size: 0.78rem;
+  --ui-button-font-weight: 700;
+  --ui-button-padding-inline: 1.15rem;
+  --ui-button-height: 2.75rem;
+  --ui-input-radius: 2px;
+  --ui-select-radius: 2px;
+  --ui-textarea-radius: 2px;
+  --ui-badge-radius: 1px;
+  --ui-badge-font-size: 0.68rem;
+  --ui-tag-radius: 1px;
+  --ui-avatar-radius: 2px;
+  --ui-navbar-bg: color-mix(in srgb, var(--dm-paper) 86%, transparent);
+  --ui-navbar-max-width: var(--dm-max);
+  --ui-navbar-height: var(--dm-header-h);
+  --ui-footer-bg: var(--dm-petrol-950);
+  --ui-footer-max-width: var(--dm-max);
+  --ui-footer-padding-block: 4.5rem;
+  --ui-modal-radius: 3px;
+}
+
+[data-theme='dark'] {
+  --dm-paper: #071b19;
+  --dm-paper-deep: #0a2320;
+  --dm-paper-raised: #0d2824;
+  --dm-paper-white: #102f2b;
+  --dm-ink: #e9f2ec;
+  --dm-ink-soft: #c1d5cc;
+  --dm-ink-muted: #95ada3;
+  --dm-ink-subtle: #708a80;
+  --dm-rule: #1e3a34;
+  --dm-rule-strong: #2b4b44;
+  --dm-lagoon: #5ec1ae;
+  --dm-lagoon-soft: #123b34;
+  --dm-signal: #f07b64;
+  --dm-signal-soft: #3a1c18;
+  --dm-sand: #e0ba6d;
+  --dm-sand-soft: #332a1a;
+  --dm-map-water: #0a2a2a;
+  --dm-map-land: #14312c;
+  --dm-map-land-alt: #1b3a33;
+  --dm-map-line: #2a4a42;
+  --dm-shadow: 0 30px 90px -48px rgba(0, 0, 0, 0.8);
+  --dm-shadow-soft: 0 16px 40px -28px rgba(0, 0, 0, 0.65);
+
+  --tahoe-color-background: var(--dm-paper);
+  --tahoe-color-surface: var(--dm-paper-raised);
+  --tahoe-color-surface-raised: var(--dm-paper-white);
+  --tahoe-color-surface-sunken: var(--dm-paper-deep);
+  --tahoe-color-surface-hover: #12312c;
+  --tahoe-color-surface-active: #173a34;
+  --tahoe-color-border: var(--dm-rule);
+  --tahoe-color-border-strong: var(--dm-rule-strong);
+  --tahoe-color-divider: var(--dm-rule);
+  --tahoe-color-text: var(--dm-ink);
+  --tahoe-color-text-muted: var(--dm-ink-muted);
+  --tahoe-color-text-subtle: var(--dm-ink-subtle);
+  --tahoe-color-text-inverse: var(--dm-paper-deep);
+  --tahoe-color-primary: var(--dm-petrol-400);
+  --tahoe-color-primary-hover: var(--dm-petrol-300);
+  --tahoe-color-primary-active: var(--dm-petrol-200);
+  --tahoe-color-primary-subtle: #103a34;
+  --tahoe-color-primary-subtle-hover: #154740;
+  --tahoe-color-primary-text: var(--dm-petrol-200);
+  --tahoe-color-on-primary: var(--dm-petrol-950);
+  --tahoe-color-accent: var(--dm-sand-300);
+  --tahoe-color-accent-hover: var(--dm-sand-200);
+  --tahoe-color-accent-active: var(--dm-sand-100);
+  --tahoe-color-accent-subtle: var(--dm-sand-soft);
+  --tahoe-color-accent-subtle-hover: #44371f;
+  --tahoe-color-accent-text: var(--dm-sand-200);
+  --tahoe-color-on-accent: var(--dm-petrol-950);
+  --tahoe-color-danger: var(--dm-signal);
+  --tahoe-color-danger-hover: var(--dm-signal-300);
+  --tahoe-color-danger-subtle: var(--dm-signal-soft);
+  --tahoe-color-danger-subtle-hover: #4a231d;
+  --tahoe-color-danger-text: var(--dm-signal-200);
+  --tahoe-color-on-danger: var(--dm-petrol-950);
+  --tahoe-color-focus-ring: color-mix(in srgb, var(--dm-petrol-300) 45%, transparent);
+  --ui-navbar-bg: color-mix(in srgb, var(--dm-paper) 88%, transparent);
+  --ui-footer-bg: #041412;
+}

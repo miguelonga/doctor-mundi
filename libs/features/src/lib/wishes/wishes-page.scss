@@ -1,0 +1,420 @@
+.dm-wishes__head-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.dm-wishes__dirty {
+  font-family: var(--dm-font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--dm-sand-800);
+}
+
+.dm-wishes__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 21rem);
+  align-items: start;
+  gap: clamp(1rem, 2.5vw, 1.6rem);
+}
+
+.dm-wishes__editor {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.dm-wishes-panel {
+  padding: clamp(0.9rem, 2vw, 1.2rem);
+  border: 1px solid var(--dm-rule);
+  background: var(--dm-paper-raised);
+}
+
+.dm-wishes-panel__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.dm-wishes-panel__head h2 {
+  margin-top: 0.18rem;
+  font-family: var(--dm-font-display);
+  font-size: 1.45rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.dm-wishes-panel__head > span {
+  flex: none;
+  font-family: var(--dm-font-mono);
+  font-size: 0.54rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--dm-ink-muted);
+}
+
+.dm-wishes-panel .dm-chip svg {
+  width: 13px;
+  height: 13px;
+}
+
+.dm-chip--compact {
+  min-height: 1.7rem;
+  padding: 0.28rem 0.5rem;
+  font-size: 0.68rem;
+}
+
+.dm-wishes-search {
+  position: relative;
+  margin-bottom: 0.65rem;
+}
+
+.dm-wishes-search > svg {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 0.7rem;
+  width: 14px;
+  height: 14px;
+  transform: translateY(-50%);
+  color: var(--dm-ink-muted);
+  pointer-events: none;
+}
+
+.dm-wishes-search ui-input {
+  display: block;
+  width: 100%;
+}
+
+.dm-wishes__country-row {
+  max-height: 13rem;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+  scrollbar-width: thin;
+}
+
+.dm-wishes__hint {
+  font-size: 0.62rem;
+  line-height: 1.4;
+  color: var(--dm-ink-muted);
+}
+
+.dm-wishes-dates__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+  max-width: 28rem;
+}
+
+.dm-wishes-dates__fields label {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.dm-wishes-dates__fields span {
+  font-size: 0.54rem;
+  font-weight: 750;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--dm-ink-muted);
+}
+
+.dm-wishes__error {
+  margin-top: 0.45rem;
+  font-size: 0.68rem;
+  color: var(--dm-signal-800);
+}
+
+.dm-wishes-alerts {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dm-wishes-alerts__copy {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+}
+
+.dm-wishes-alerts__icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border: 1px solid var(--dm-rule);
+  color: var(--dm-petrol-700);
+}
+
+.dm-wishes-alerts__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.dm-wishes-alerts h2 {
+  font-family: var(--dm-font-display);
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.dm-wishes-alerts p {
+  max-width: 34rem;
+  margin-top: 0.15rem;
+  font-size: 0.7rem;
+  line-height: 1.45;
+  color: var(--dm-ink-muted);
+}
+
+.dm-wishes-alerts__toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: none;
+}
+
+.dm-wishes-alerts__toggle > span {
+  font-family: var(--dm-font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--dm-ink-muted);
+}
+
+.dm-wishes__aside {
+  position: sticky;
+  top: 1.5rem;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.dm-wishes-summary {
+  padding: 1rem;
+  border: 1px solid var(--dm-rule);
+  background: var(--dm-paper-raised);
+}
+
+.dm-wishes-summary__head h2 {
+  margin-top: 0.2rem;
+  font-family: var(--dm-font-display);
+  font-size: 1.6rem;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.dm-wishes-summary__head p:last-child {
+  margin-top: 0.3rem;
+  font-size: 0.66rem;
+  line-height: 1.45;
+  color: var(--dm-ink-muted);
+}
+
+.dm-wishes-summary__rows {
+  display: grid;
+  gap: 1px;
+  margin-block: 0.8rem;
+  border-block: 1px solid var(--dm-rule);
+  background: var(--dm-rule);
+}
+
+.dm-wishes-summary__rows > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.4rem 0.55rem;
+  background: var(--dm-paper);
+}
+
+.dm-wishes-summary__rows span,
+.dm-wishes-summary__dates span {
+  font-size: 0.52rem;
+  font-weight: 750;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--dm-ink-muted);
+}
+
+.dm-wishes-summary__rows strong {
+  font-size: 0.68rem;
+  font-weight: 650;
+  text-align: right;
+}
+
+.dm-wishes-summary__dates {
+  display: grid;
+  gap: 0.15rem;
+  margin-bottom: 0.8rem;
+}
+
+.dm-wishes-summary__dates strong {
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.dm-wishes-summary__clear {
+  display: block;
+  margin: 0.5rem auto 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--dm-ink-muted);
+  font-family: var(--dm-font-ui);
+  font-size: 0.6rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.dm-wishes-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.8rem;
+  border-left: 2px solid var(--dm-lagoon);
+  background: var(--dm-lagoon-soft);
+}
+
+.dm-wishes-tip svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  color: var(--dm-petrol-700);
+}
+
+.dm-wishes-tip p {
+  font-size: 0.64rem;
+  line-height: 1.45;
+  color: var(--dm-ink-soft);
+}
+
+.dm-wishes-section {
+  margin-top: clamp(2.4rem, 4vw, 3.4rem);
+  padding-top: clamp(1.4rem, 2.5vw, 2rem);
+  border-top: 1px solid var(--dm-rule);
+}
+
+.dm-wishes-section--saved {
+  margin-top: 2rem;
+}
+
+.dm-wishes-section__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.dm-wishes-section__head h2 {
+  margin-top: 0.25rem;
+  font-family: var(--dm-font-display);
+  font-size: clamp(1.9rem, 3.2vw, 2.7rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+}
+
+.dm-wishes-section__head p:not(.dm-eyebrow) {
+  max-width: 36rem;
+  margin-top: 0.35rem;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  color: var(--dm-ink-muted);
+}
+
+.dm-wishes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.dm-wishes-card-wrap {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.dm-wishes-reason {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 1.7rem;
+  padding: 0.2rem 0.4rem;
+  border-left: 2px solid var(--dm-lagoon);
+  background: var(--dm-lagoon-soft);
+  font-size: 0.58rem;
+  line-height: 1.3;
+  color: var(--dm-petrol-700);
+}
+
+.dm-wishes-reason svg {
+  width: 12px;
+  height: 12px;
+  flex: none;
+}
+
+.dm-wishes__skeleton {
+  display: grid;
+  grid-template-columns: 1fr 21rem;
+  gap: 1rem;
+}
+
+.dm-wishes__skeleton .dm-skeleton {
+  height: 560px;
+}
+
+@media (max-width: 1050px) {
+  .dm-wishes__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .dm-wishes__aside {
+    position: static;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .dm-wishes-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .dm-wishes__head-actions {
+    display: grid;
+    justify-items: start;
+  }
+
+  .dm-wishes__aside {
+    grid-template-columns: 1fr;
+  }
+
+  .dm-wishes-alerts {
+    display: grid;
+  }
+
+  .dm-wishes-alerts__toggle {
+    justify-content: space-between;
+  }
+
+  .dm-wishes-section__head {
+    display: grid;
+  }
+
+  .dm-wishes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dm-wishes-dates__fields {
+    grid-template-columns: 1fr;
+  }
+
+  .dm-wishes__skeleton {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,199 @@
+@if (failed()) {
+  <section class="dm-page">
+    <div class="dm-container">
+      <div class="dm-empty">
+        <h1>{{ i18n.t('org.loadError') }}</h1>
+        <p>{{ i18n.t('org.loadErrorBody') }}</p>
+        <button ui-button intent="primary" (click)="retry()">{{ i18n.t('common.retry') }}</button>
+      </div>
+    </div>
+  </section>
+} @else if (notFound()) {
+  <section class="dm-page">
+    <div class="dm-container">
+      <div class="dm-empty">
+        <h1>{{ i18n.t('org.notFound') }}</h1>
+        <p>{{ i18n.t('org.notFoundBody') }}</p>
+        <a ui-button routerLink="/organizaciones" intent="primary">
+          {{ i18n.t('nav.organizations') }}
+          <svg lucideArrowUpRight aria-hidden="true"></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+} @else if (!organization()) {
+  <section class="dm-page">
+    <div class="dm-container dm-org-detail-skeleton">
+      <div class="dm-skeleton dm-org-detail-skeleton__hero"></div>
+      <div class="dm-skeleton dm-org-detail-skeleton__body"></div>
+    </div>
+  </section>
+} @else {
+  @let org = organization()!;
+
+  <article class="dm-org-detail" [style.--dm-org-color]="org.color">
+    <header class="dm-org-hero">
+      <div class="dm-org-hero__pattern" aria-hidden="true"></div>
+      <div class="dm-container dm-org-hero__inner">
+        <nav class="dm-org-hero__crumbs">
+          <a routerLink="/organizaciones">
+            <svg lucideArrowLeft aria-hidden="true"></svg>
+            {{ i18n.t('nav.organizations') }}
+          </a>
+          <span aria-hidden="true">/</span>
+          <span>{{ org.name }}</span>
+        </nav>
+
+        <div class="dm-org-hero__identity">
+          <dm-organization-mark [organization]="org" size="lg" />
+          <div class="dm-org-hero__copy">
+            <div class="dm-org-hero__badges">
+              @if (org.verified) {
+                <span class="dm-org-hero__verified">
+                  <svg lucideBadgeCheck aria-hidden="true"></svg>
+                  {{ i18n.t('org.verifiedBadge') }}
+                </span>
+              }
+              <span>{{ i18n.t('org.founded', { year: org.founded }) }}</span>
+            </div>
+            <h1>{{ org.name }}</h1>
+            <div class="dm-org-hero__meta">
+              <span>
+                <svg lucideMapPin aria-hidden="true"></svg>
+                {{ countryName(org.countryCode) }}
+              </span>
+              <span class="dm-org-hero__rating">★ {{ org.rating }} <small>/ 5</small></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dm-org-hero__stats">
+          <div>
+            <span>{{ i18n.t('org.openNow') }}</span>
+            <strong>{{ openMissions().length }}</strong>
+          </div>
+          <div>
+            <span>{{ i18n.t('org.missionsTotal') }}</span>
+            <strong>{{ allMissions().length }}</strong>
+          </div>
+          <div>
+            <span>{{ i18n.t('org.reviewsLabel') }}</span>
+            <strong>{{ org.reviewCount }}</strong>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="dm-page dm-org-detail__page">
+      <div class="dm-container">
+        <div class="dm-detail-layout">
+          <main class="dm-detail-main">
+            <section class="dm-detail-section">
+              <p class="dm-eyebrow">{{ i18n.t('org.aboutTitle') }}</p>
+              <h2>{{ org.name }}</h2>
+              <div class="dm-prose">
+                <p>{{ i18n.loc(org.description) }}</p>
+              </div>
+
+              <div class="dm-org-focus">
+                <h3>{{ i18n.t('org.focus') }}</h3>
+                <div class="dm-detail__chips">
+                  @for (focus of org.focusAreas; track $index) {
+                    <span class="dm-tag dm-tag--sand">{{ i18n.loc(focus) }}</span>
+                  }
+                </div>
+              </div>
+            </section>
+
+            <section class="dm-detail-section">
+              <div class="dm-org-section-head">
+                <div>
+                  <p class="dm-eyebrow">{{ i18n.t('mission.location') }}</p>
+                  <h2>{{ i18n.t('org.missionsTitle') }}</h2>
+                </div>
+                <span class="dm-org-section-head__count">
+                  {{ i18n.t('org.openMissions', { count: openMissions().length }) }}
+                </span>
+              </div>
+
+              @if (openMissions().length) {
+                <div class="dm-org-map">
+                  <dm-world-map [missions]="mapMissions()" height="360px" />
+                </div>
+
+                <div class="dm-results-grid dm-org-missions">
+                  @for (mission of openMissions(); track mission.id) {
+                    <dm-mission-card
+                      [mission]="mission"
+                      [organization]="org"
+                      [match]="matchFor(mission)"
+                      [saved]="saved.isSaved(mission.id)"
+                      (saveToggle)="onSave($event)"
+                    />
+                  }
+                </div>
+              } @else {
+                <div class="dm-callout">
+                  <strong>{{ i18n.t('org.noMissions') }}</strong>
+                  <p>{{ i18n.t('org.sub') }}</p>
+                </div>
+              }
+            </section>
+          </main>
+
+          <aside class="dm-detail-aside">
+            @if (org.verified) {
+              <div class="dm-aside-card dm-org-verify">
+                <div class="dm-org-verify__mark">
+                  <svg lucideShieldCheck aria-hidden="true"></svg>
+                </div>
+                <h2>{{ i18n.t('common.verified') }}</h2>
+                <p>{{ i18n.t('org.verifiedNote') }}</p>
+                <a class="dm-link-arrow" routerLink="/como-funciona">
+                  {{ i18n.t('org.trustCta') }}
+                  <svg lucideArrowUpRight aria-hidden="true"></svg>
+                </a>
+              </div>
+            }
+
+            <div class="dm-aside-card">
+              <div class="dm-aside-card__head">
+                <h2>{{ i18n.t('common.about') }}</h2>
+              </div>
+              <div class="dm-fact-grid dm-org-facts">
+                <div class="dm-fact">
+                  <span class="dm-fact__label">{{ i18n.t('common.country') }}</span>
+                  <span class="dm-fact__value">{{ countryName(org.countryCode) }}</span>
+                </div>
+                <div class="dm-fact">
+                  <span class="dm-fact__label">{{ i18n.t('org.foundedLabel') }}</span>
+                  <span class="dm-fact__value">{{ org.founded }}</span>
+                </div>
+                <div class="dm-fact">
+                  <span class="dm-fact__label">{{ i18n.t('org.ratingLabel') }}</span>
+                  <span class="dm-fact__value">★ {{ org.rating }} / 5</span>
+                </div>
+                <div class="dm-fact">
+                  <span class="dm-fact__label">{{ i18n.t('org.missionsTotal') }}</span>
+                  <span class="dm-fact__value">{{ allMissions().length }}</span>
+                </div>
+              </div>
+              <a ui-button [href]="org.website" target="_blank" rel="noopener" variant="outline" intent="neutral" block>
+                <svg lucideGlobe aria-hidden="true"></svg>
+                {{ i18n.t('org.website') }}
+                <svg lucideArrowUpRight aria-hidden="true"></svg>
+              </a>
+            </div>
+
+            <div class="dm-aside-card dm-org-contact">
+              <p>{{ i18n.t('org.sub') }}</p>
+              <a ui-button [href]="'mailto:hola@doctormundi.org'" intent="primary" block>
+                {{ i18n.t('org.contact') }}
+              </a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </article>
+}

@@ -1,0 +1,329 @@
+.dm-org-detail {
+  background: var(--dm-paper);
+}
+
+.dm-org-hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 140% at 92% 10%, color-mix(in srgb, var(--dm-org-color) 34%, transparent) 0%, transparent 55%),
+    var(--dm-petrol-950);
+  color: var(--dm-paper-raised);
+}
+
+.dm-org-hero__pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--dm-paper-raised) 30%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--dm-paper-raised) 30%, transparent) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(105deg, transparent 22%, #000 100%);
+}
+
+.dm-org-hero__inner {
+  position: relative;
+  z-index: 1;
+  padding-block: clamp(2.2rem, 4vw, 3.4rem) clamp(1.8rem, 3.5vw, 2.8rem);
+}
+
+.dm-org-hero__crumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.4rem);
+  font-size: 0.62rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--dm-paper-raised) 60%, transparent);
+}
+
+.dm-org-hero__crumbs a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--dm-paper-raised);
+}
+
+.dm-org-hero__crumbs a:hover {
+  color: var(--dm-sand-300);
+}
+
+.dm-org-hero__crumbs svg {
+  width: 13px;
+  height: 13px;
+}
+
+.dm-org-hero__identity {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+}
+
+.dm-org-hero__identity dm-organization-mark {
+  margin-top: 0.2rem;
+}
+
+.dm-org-hero__copy {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.dm-org-hero__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--dm-paper-raised) 66%, transparent);
+}
+
+.dm-org-hero__verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.16rem 0.4rem;
+  border: 1px solid color-mix(in srgb, var(--dm-sand-300) 55%, transparent);
+  color: var(--dm-sand-200);
+}
+
+.dm-org-hero__verified svg {
+  width: 12px;
+  height: 12px;
+}
+
+.dm-org-hero h1 {
+  font-family: var(--dm-font-display);
+  font-size: clamp(3rem, 6.2vw, 6.4rem);
+  font-weight: 500;
+  letter-spacing: -0.055em;
+  line-height: 0.9;
+  color: var(--dm-paper-raised);
+  text-wrap: balance;
+}
+
+.dm-org-hero__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.55rem 1.1rem;
+  margin-top: 0.4rem;
+  font-size: 0.7rem;
+  color: color-mix(in srgb, var(--dm-paper-raised) 74%, transparent);
+}
+
+.dm-org-hero__meta > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.dm-org-hero__meta svg {
+  width: 14px;
+  height: 14px;
+  color: var(--dm-sand-300);
+}
+
+.dm-org-hero__rating {
+  font-family: var(--dm-font-mono);
+  color: var(--dm-sand-200);
+}
+
+.dm-org-hero__rating small {
+  color: color-mix(in srgb, var(--dm-paper-raised) 55%, transparent);
+}
+
+.dm-org-hero__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: clamp(1.8rem, 3.5vw, 2.8rem);
+  padding-top: 1.1rem;
+  border-top: 1px solid color-mix(in srgb, var(--dm-paper-raised) 20%, transparent);
+}
+
+.dm-org-hero__stats > div {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  min-width: 10rem;
+  padding-right: 1.2rem;
+  border-right: 1px solid color-mix(in srgb, var(--dm-paper-raised) 18%, transparent);
+}
+
+.dm-org-hero__stats > div:last-child {
+  border-right: 0;
+}
+
+.dm-org-hero__stats span {
+  font-size: 0.56rem;
+  font-weight: 750;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--dm-paper-raised) 54%, transparent);
+}
+
+.dm-org-hero__stats strong {
+  font-family: var(--dm-font-display);
+  font-size: 1.65rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.dm-org-detail__page {
+  padding-top: clamp(2rem, 3.5vw, 3.2rem);
+}
+
+.dm-org-focus {
+  margin-top: 1.5rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--dm-rule);
+}
+
+.dm-org-focus h3 {
+  font-family: var(--dm-font-ui);
+  font-size: 0.62rem;
+  font-weight: 750;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dm-ink-muted);
+}
+
+.dm-org-section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.dm-org-section-head h2 {
+  margin-top: 0.35rem;
+}
+
+.dm-org-section-head__count {
+  flex: none;
+  font-family: var(--dm-font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--dm-ink-muted);
+}
+
+.dm-org-map {
+  margin-bottom: 1.1rem;
+  border: 1px solid var(--dm-rule);
+}
+
+.dm-org-missions {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.dm-org-verify {
+  display: grid;
+  gap: 0.55rem;
+  border-left: 3px solid var(--dm-lagoon);
+  background: var(--dm-lagoon-soft);
+}
+
+.dm-org-verify__mark {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid color-mix(in srgb, var(--dm-lagoon) 40%, var(--dm-rule));
+  color: var(--dm-petrol-700);
+}
+
+.dm-org-verify__mark svg {
+  width: 19px;
+  height: 19px;
+}
+
+.dm-org-verify h2 {
+  font-family: var(--dm-font-display);
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.dm-org-verify p {
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: var(--dm-ink-soft);
+}
+
+.dm-org-facts {
+  margin-bottom: 0.8rem;
+}
+
+.dm-org-contact {
+  display: grid;
+  gap: 0.7rem;
+  background: var(--dm-paper);
+}
+
+.dm-org-contact p {
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: var(--dm-ink-soft);
+}
+
+.dm-org-detail-skeleton {
+  display: grid;
+  gap: 2rem;
+}
+
+.dm-org-detail-skeleton__hero {
+  height: 360px;
+}
+
+.dm-org-detail-skeleton__body {
+  height: 500px;
+}
+
+@media (max-width: 760px) {
+  .dm-org-hero__identity {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .dm-org-hero h1 {
+    font-size: clamp(2.6rem, 12vw, 3.8rem);
+  }
+
+  .dm-org-hero__stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+
+  .dm-org-hero__stats > div {
+    display: grid;
+    gap: 0.15rem;
+    min-width: 0;
+    padding-right: 0.5rem;
+  }
+
+  .dm-org-hero__stats span {
+    font-size: 0.5rem;
+    line-height: 1.2;
+  }
+
+  .dm-org-hero__stats strong {
+    font-size: 1.3rem;
+  }
+
+  .dm-org-missions {
+    grid-template-columns: 1fr;
+  }
+
+  .dm-org-section-head {
+    display: grid;
+    gap: 0.4rem;
+  }
+}

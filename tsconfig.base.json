@@ -1,0 +1,85 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "bundler",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2022",
+    "module": "esnext",
+    "lib": [
+      "es2022",
+      "dom"
+    ],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@doctor-mundi/core": [
+        "./libs/core/src/index.ts"
+      ],
+      "@doctor-mundi/data-access": [
+        "./libs/data-access/src/index.ts"
+      ],
+      "@doctor-mundi/ui": [
+        "./libs/ui/src/index.ts"
+      ],
+      "@doctor-mundi/features": [
+        "./libs/features/src/index.ts"
+      ],
+      "@doctor-mundi/features/shared": [
+        "./libs/features/src/lib/shared/index.ts"
+      ],
+      "@doctor-mundi/features/landing": [
+        "./libs/features/src/lib/landing/index.ts"
+      ],
+      "@doctor-mundi/features/explore": [
+        "./libs/features/src/lib/explore/index.ts"
+      ],
+      "@doctor-mundi/features/mission-detail": [
+        "./libs/features/src/lib/mission-detail/index.ts"
+      ],
+      "@doctor-mundi/features/apply": [
+        "./libs/features/src/lib/apply/index.ts"
+      ],
+      "@doctor-mundi/features/organizations": [
+        "./libs/features/src/lib/organizations/index.ts"
+      ],
+      "@doctor-mundi/features/organization-detail": [
+        "./libs/features/src/lib/organization-detail/index.ts"
+      ],
+      "@doctor-mundi/features/how-it-works": [
+        "./libs/features/src/lib/how-it-works/index.ts"
+      ],
+      "@doctor-mundi/features/auth": [
+        "./libs/features/src/lib/auth/index.ts"
+      ],
+      "@doctor-mundi/features/profile": [
+        "./libs/features/src/lib/profile/index.ts"
+      ],
+      "@doctor-mundi/features/profile-edit": [
+        "./libs/features/src/lib/profile-edit/index.ts"
+      ],
+      "@doctor-mundi/features/wishes": [
+        "./libs/features/src/lib/wishes/index.ts"
+      ],
+      "@doctor-mundi/features/applications": [
+        "./libs/features/src/lib/applications/index.ts"
+      ],
+      "@doctor-mundi/features/not-found": [
+        "./libs/features/src/lib/not-found/index.ts"
+      ]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
+}

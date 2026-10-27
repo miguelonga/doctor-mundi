@@ -1,0 +1,63 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--dm-ink);
+  text-decoration: none;
+}
+
+.dm-logo__mark {
+  display: grid;
+  place-items: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  flex: none;
+  padding: 0.38rem;
+  background: var(--dm-petrol-700);
+  color: var(--dm-paper-raised);
+  clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 0 100%);
+}
+
+.dm-logo__mark svg {
+  width: 100%;
+  height: 100%;
+}
+
+.dm-logo__type {
+  display: grid;
+  gap: 0.12rem;
+  line-height: 1;
+}
+
+.dm-logo__name {
+  font-family: var(--dm-font-display);
+  font-size: 1.24rem;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+}
+
+.dm-logo__sub {
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dm-ink-muted);
+}
+
+:host([data-inverted]) {
+  color: var(--dm-paper-raised);
+}
+
+:host([data-inverted]) .dm-logo__mark {
+  background: var(--dm-paper-raised);
+  color: var(--dm-petrol-950);
+}
+
+:host([data-inverted]) .dm-logo__sub {
+  color: color-mix(in srgb, var(--dm-paper-raised) 55%, transparent);
+}
+
+:host([data-compact]) .dm-logo__mark {
+  width: 2rem;
+  height: 2rem;
+}

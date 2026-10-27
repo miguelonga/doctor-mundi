@@ -1,0 +1,11 @@
+:host {
+  display: inline-flex;
+}
+
+.dm-urgency-dot {
+  width: 5px;
+  height: 5px;
+  background: currentColor;
+  border-radius: 50%;
+  opacity: 0.85;
+}

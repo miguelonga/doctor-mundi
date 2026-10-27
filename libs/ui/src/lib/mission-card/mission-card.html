@@ -1,0 +1,78 @@
+<article class="dm-mission">
+  <a class="dm-mission__media" [routerLink]="['/misiones', mission().slug]" [attr.aria-label]="imageAlt()">
+    <img
+      [src]="mission().photos[0]"
+      [alt]="imageAlt()"
+      loading="lazy"
+      decoding="async"
+    />
+    <span class="dm-mission__coords dm-coords">{{ coords() }}</span>
+    <div class="dm-mission__media-tags">
+      <dm-urgency-tag [urgency]="mission().urgency" />
+      @if (verified()) {
+        <span class="dm-tag dm-tag--ghost dm-mission__verified">
+          <svg lucideBadgeCheck aria-hidden="true"></svg>
+          {{ i18n.t('common.verified') }}
+        </span>
+      }
+    </div>
+  </a>
+
+  <div class="dm-mission__body">
+    <div class="dm-mission__top">
+      <div class="dm-mission__org">
+        @if (organization(); as org) {
+          <dm-organization-mark [organization]="org" size="sm" />
+        }
+        <span class="dm-mission__org-name">{{ orgName() }}</span>
+        @if (match(); as m) {
+          <span class="dm-mission__match" [attr.title]="matchTitle()">
+            {{ matchLabel() }}
+          </span>
+        }
+      </div>
+      <button
+        class="dm-save"
+        type="button"
+        [class.is-saved]="saved()"
+        [attr.aria-pressed]="saved()"
+        [attr.aria-label]="saveLabel()"
+        [attr.title]="saveLabel()"
+        (click)="toggleSave($event)"
+      >
+        <svg lucideHeart aria-hidden="true"></svg>
+      </button>
+    </div>
+
+    <h3 class="dm-mission__title">
+      <a [routerLink]="['/misiones', mission().slug]">{{ i18n.loc(mission().title) }}</a>
+    </h3>
+    <p class="dm-mission__summary">{{ i18n.loc(mission().summary) }}</p>
+
+    <ul class="dm-mission__meta" role="list">
+      <li>
+        <svg lucideMapPin aria-hidden="true"></svg>
+        <span>{{ place() }}</span>
+      </li>
+      <li>
+        <svg lucideCalendarDays aria-hidden="true"></svg>
+        <span>{{ dates() }}</span>
+      </li>
+      <li>
+        <svg lucideClock3 aria-hidden="true"></svg>
+        <span>{{ duration() }}</span>
+      </li>
+    </ul>
+
+    <div class="dm-mission__footer">
+      <span class="dm-mission__slots" [class.is-low]="openSlots() <= 2">
+        <span class="dm-mission__slots-dot" aria-hidden="true"></span>
+        {{ slotsLabel() }}
+      </span>
+      <a class="dm-link-arrow" [routerLink]="['/misiones', mission().slug]">
+        {{ i18n.t('common.viewMission') }}
+        <svg lucideArrowUpRight aria-hidden="true"></svg>
+      </a>
+    </div>
+  </div>
+</article>

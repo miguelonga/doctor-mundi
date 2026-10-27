@@ -1,0 +1,160 @@
+<header class="dm-header">
+  <div class="dm-header__strip">
+    <div class="dm-container dm-header__strip-inner">
+      <span class="dm-header__demo">
+        <i aria-hidden="true"></i>
+        {{ i18n.t('common.demo') }}
+        <span class="dm-header__demo-note">· {{ i18n.t('footer.note') }}</span>
+      </span>
+      @if (mockDb) {
+        <button type="button" class="dm-header__reset" (click)="resetDemo()">
+          {{ i18n.t('nav.resetDemo') }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="dm-header__main">
+    <div class="dm-container dm-header__inner">
+      <a class="dm-header__brand" routerLink="/" aria-label="Doctor Mundi" (click)="closeMenu()">
+        <dm-logo />
+      </a>
+
+      <nav class="dm-header__nav" [attr.aria-label]="i18n.t('nav.menu')">
+        <a routerLink="/misiones" routerLinkActive="is-active" (click)="closeMenu()">
+          {{ i18n.t('nav.missions') }}
+        </a>
+        <a routerLink="/organizaciones" routerLinkActive="is-active" (click)="closeMenu()">
+          {{ i18n.t('nav.organizations') }}
+        </a>
+        <a routerLink="/como-funciona" routerLinkActive="is-active" (click)="closeMenu()">
+          {{ i18n.t('nav.how') }}
+        </a>
+      </nav>
+
+      <div class="dm-header__actions">
+        <dm-language-switcher class="dm-header__lang" />
+        <button
+          type="button"
+          class="dm-icon-btn dm-header__theme"
+          (click)="toggleTheme()"
+          [attr.aria-label]="i18n.t('nav.theme')"
+          [attr.title]="i18n.t('nav.theme')"
+        >
+          @if (theme.theme() === 'light') {
+            <svg lucideMoon aria-hidden="true"></svg>
+          } @else {
+            <svg lucideSun aria-hidden="true"></svg>
+          }
+        </button>
+
+        @if (auth.isAuthenticated()) {
+          <a class="dm-icon-btn dm-header__saved" routerLink="/deseos" [attr.aria-label]="i18n.t('nav.saved')">
+            <svg lucideHeart aria-hidden="true"></svg>
+            @if (saved.count() > 0) {
+              <span class="dm-count">{{ saved.count() }}</span>
+            }
+          </a>
+
+          <div class="dm-user">
+            <button
+              type="button"
+              class="dm-user__trigger"
+              [attr.aria-expanded]="userOpen()"
+              aria-haspopup="menu"
+              (click)="userOpen.set(!userOpen())"
+            >
+              <ui-avatar
+                [src]="auth.user()?.avatar"
+                [name]="auth.user()?.name"
+                size="sm"
+                shape="rounded"
+              />
+              <span class="dm-user__name">{{ auth.user()?.name }}</span>
+              <svg lucideChevronDown aria-hidden="true"></svg>
+            </button>
+            @if (userOpen()) {
+              <div class="dm-user__menu" role="menu">
+                <a routerLink="/perfil" role="menuitem" (click)="closeMenu()">{{ i18n.t('nav.profile') }}</a>
+                <a routerLink="/deseos" role="menuitem" (click)="closeMenu()">
+                  {{ i18n.t('nav.wishes') }}
+                  @if (saved.count() > 0) {
+                    <span class="dm-user__count">{{ saved.count() }}</span>
+                  }
+                </a>
+                <a routerLink="/postulaciones" role="menuitem" (click)="closeMenu()">
+                  {{ i18n.t('nav.applications') }}
+                  @if (applications.activeCount() > 0) {
+                    <span class="dm-user__count dm-user__count--signal">{{ applications.activeCount() }}</span>
+                  }
+                </a>
+                <span class="dm-user__rule" aria-hidden="true"></span>
+                <button type="button" role="menuitem" (click)="logout()">
+                  <svg lucideLogOut aria-hidden="true"></svg>
+                  {{ i18n.t('nav.logout') }}
+                </button>
+              </div>
+            }
+          </div>
+        } @else {
+          <a class="dm-header__login" routerLink="/entrar">{{ i18n.t('nav.login') }}</a>
+          <a class="dm-header__cta" routerLink="/crear-cuenta">{{ i18n.t('nav.register') }}</a>
+        }
+
+        <button
+          type="button"
+          class="dm-icon-btn dm-header__burger"
+          [attr.aria-expanded]="menuOpen()"
+          aria-controls="dm-mobile-menu"
+          [attr.aria-label]="menuOpen() ? i18n.t('nav.closeMenu') : i18n.t('nav.openMenu')"
+          (click)="toggleMenu()"
+        >
+          @if (menuOpen()) {
+            <svg lucideX aria-hidden="true"></svg>
+          } @else {
+            <svg lucideMenu aria-hidden="true"></svg>
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+
+  @if (menuOpen()) {
+    <div class="dm-mobile-menu" id="dm-mobile-menu">
+      <nav class="dm-mobile-menu__nav" [attr.aria-label]="i18n.t('nav.menu')">
+        <a routerLink="/misiones" (click)="closeMenu()">{{ i18n.t('nav.missions') }}</a>
+        <a routerLink="/organizaciones" (click)="closeMenu()">{{ i18n.t('nav.organizations') }}</a>
+        <a routerLink="/como-funciona" (click)="closeMenu()">{{ i18n.t('nav.how') }}</a>
+        @if (auth.isAuthenticated()) {
+          <a routerLink="/perfil" (click)="closeMenu()">{{ i18n.t('nav.profile') }}</a>
+          <a routerLink="/deseos" (click)="closeMenu()">{{ i18n.t('nav.wishes') }}</a>
+          <a routerLink="/postulaciones" (click)="closeMenu()">{{ i18n.t('nav.applications') }}</a>
+        }
+      </nav>
+
+      <div class="dm-mobile-menu__meta">
+        <dm-language-switcher />
+        <button type="button" class="dm-mobile-menu__theme" (click)="toggleTheme()">
+          @if (theme.theme() === 'light') {
+            <svg lucideMoon aria-hidden="true"></svg>
+          } @else {
+            <svg lucideSun aria-hidden="true"></svg>
+          }
+          {{ i18n.t('nav.theme') }}
+        </button>
+      </div>
+
+      <div class="dm-mobile-menu__auth">
+        @if (auth.isAuthenticated()) {
+          <button type="button" class="dm-mobile-menu__logout" (click)="logout()">
+            <svg lucideLogOut aria-hidden="true"></svg>
+            {{ i18n.t('nav.logout') }}
+          </button>
+        } @else {
+          <a routerLink="/entrar" class="dm-mobile-menu__login" (click)="closeMenu()">{{ i18n.t('nav.login') }}</a>
+          <a routerLink="/crear-cuenta" class="dm-mobile-menu__cta" (click)="closeMenu()">{{ i18n.t('nav.register') }}</a>
+        }
+      </div>
+    </div>
+  }
+</header>

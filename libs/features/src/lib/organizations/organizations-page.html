@@ -1,0 +1,120 @@
+<section class="dm-page dm-orgs">
+  <div class="dm-container">
+    <header class="dm-page-head">
+      <div class="dm-page-head__copy">
+        <p class="dm-eyebrow">{{ i18n.t('nav.organizations') }}</p>
+        <h1>{{ i18n.t('org.title') }}</h1>
+        <p class="dm-page-head__sub">{{ i18n.t('org.sub') }}</p>
+      </div>
+      <div class="dm-page-head__actions">
+        <span class="dm-orgs__count">
+          {{ i18n.t('org.count', { count: all().length, verified: verifiedCount() }) }}
+        </span>
+      </div>
+    </header>
+
+    <div class="dm-org-toolbar">
+      <div class="dm-org-search">
+        <svg lucideSearch aria-hidden="true"></svg>
+        <ui-input
+          type="search"
+          [value]="search()"
+          [placeholder]="i18n.t('org.search')"
+          [attr.aria-label]="i18n.t('org.search')"
+          (valueChange)="search.set($event)"
+        />
+      </div>
+      <label class="dm-org-verified">
+        <span>
+          <strong>{{ i18n.t('org.verifiedOnly') }}</strong>
+          <small>{{ i18n.t('org.verifiedNote') }}</small>
+        </span>
+        <ui-checkbox
+          [checked]="verifiedOnly()"
+          [attr.aria-label]="i18n.t('org.verifiedOnly')"
+          (checkedChange)="verifiedOnly.set($event)"
+        ></ui-checkbox>
+      </label>
+    </div>
+
+    @if (loading()) {
+      <div class="dm-org-grid">
+        @for (item of [1, 2, 3, 4]; track item) {
+          <div class="dm-skeleton dm-orgs__card-skeleton"></div>
+        }
+      </div>
+    } @else if (!filtered().length) {
+      <div class="dm-empty">
+        <svg lucideSearch aria-hidden="true"></svg>
+        <h2>{{ i18n.t('org.noResults') }}</h2>
+        <p>{{ i18n.t('org.noResultsBody') }}</p>
+        <button ui-button variant="outline" intent="neutral" (click)="reset()">
+          {{ i18n.t('common.clearAll') }}
+        </button>
+      </div>
+    } @else {
+      <div class="dm-org-grid">
+        @for (org of filtered(); track org.id) {
+          <a
+            class="dm-orgs-card"
+            [routerLink]="['/organizaciones', org.slug]"
+            [style.--dm-org-color]="org.color"
+          >
+            <div class="dm-orgs-card__top">
+              <dm-organization-mark [organization]="org" size="lg" />
+              <div class="dm-orgs-card__identity">
+                <h2>{{ org.name }}</h2>
+                <div class="dm-orgs-card__badges">
+                  @if (org.verified) {
+                    <span class="dm-org-badge">
+                      <svg lucideBadgeCheck aria-hidden="true"></svg>
+                      {{ i18n.t('common.verified') }}
+                    </span>
+                  }
+                  <span class="dm-orgs-card__country">
+                    <svg lucideMapPin aria-hidden="true"></svg>
+                    {{ countryName(org.countryCode) }}
+                  </span>
+                </div>
+              </div>
+              <span class="dm-orgs-card__rating">★ {{ org.rating }}</span>
+            </div>
+
+            <p class="dm-orgs-card__desc">{{ i18n.loc(org.description) }}</p>
+
+            <div class="dm-orgs-card__focus">
+              @for (focus of org.focusAreas.slice(0, 3); track $index) {
+                <span class="dm-tag dm-tag--sand">{{ i18n.loc(focus) }}</span>
+              }
+            </div>
+
+            <div class="dm-orgs-card__foot">
+              <span class="dm-orgs-card__missions">
+                <i aria-hidden="true"></i>
+                {{ i18n.t('org.openMissions', { count: missionCount(org.id) }) }}
+              </span>
+              <span class="dm-orgs-card__more">
+                {{ i18n.t('common.viewDetails') }}
+                <svg lucideArrowUpRight aria-hidden="true"></svg>
+              </span>
+            </div>
+          </a>
+        }
+      </div>
+    }
+
+    <div class="dm-trust-band">
+      <div class="dm-trust-band__mark">
+        <svg lucideShieldCheck aria-hidden="true"></svg>
+      </div>
+      <div class="dm-trust-band__copy">
+        <h2>{{ i18n.t('org.trustTitle') }}</h2>
+        <p>{{ i18n.t('org.verifiedNote') }}</p>
+      </div>
+      <a class="dm-link-arrow" routerLink="/como-funciona">
+        {{ i18n.t('org.trustCta') }}
+        <svg lucideArrowUpRight aria-hidden="true"></svg>
+      </a>
+    </div>
+  </div>
+</section>

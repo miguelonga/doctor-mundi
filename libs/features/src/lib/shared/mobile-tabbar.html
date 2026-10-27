@@ -1,0 +1,23 @@
+<nav class="dm-tabbar" [attr.aria-label]="i18n.t('nav.menu')">
+  <a routerLink="/misiones" routerLinkActive="is-active">
+    <svg lucideCompass aria-hidden="true"></svg>
+    <span>{{ i18n.t('nav.missions') }}</span>
+  </a>
+  <a routerLink="/deseos" routerLinkActive="is-active">
+    <svg lucideHeart aria-hidden="true"></svg>
+    <span>{{ i18n.t('nav.saved') }}</span>
+  </a>
+  <a routerLink="/postulaciones" routerLinkActive="is-active">
+    <span class="dm-tabbar__icon">
+      <svg lucideClipboardList aria-hidden="true"></svg>
+      @if (applications.activeCount() > 0) {
+        <i class="dm-tabbar__count">{{ applications.activeCount() }}</i>
+      }
+    </span>
+    <span>{{ i18n.t('nav.applications') }}</span>
+  </a>
+  <a routerLink="/perfil" routerLinkActive="is-active">
+    <svg lucideUserRound aria-hidden="true"></svg>
+    <span>{{ i18n.t('nav.profile') }}</span>
+  </a>
+</nav>

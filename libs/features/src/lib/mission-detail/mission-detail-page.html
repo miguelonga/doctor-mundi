@@ -1,0 +1,441 @@
+@if (failed()) {
+  <section class="dm-page">
+    <div class="dm-container">
+      <div class="dm-empty">
+        <svg lucideInfo aria-hidden="true"></svg>
+        <h1>{{ i18n.t('explore.loadError') }}</h1>
+        <p>{{ i18n.t('explore.loadErrorBody') }}</p>
+        <button ui-button intent="primary" (click)="retry()">{{ i18n.t('common.retry') }}</button>
+      </div>
+    </div>
+  </section>
+} @else if (notFound()) {
+  <section class="dm-page">
+    <div class="dm-container">
+      <div class="dm-empty">
+        <svg lucideMapPin aria-hidden="true"></svg>
+        <h1>{{ i18n.t('mission.notFound') }}</h1>
+        <p>{{ i18n.t('mission.notFoundBody') }}</p>
+        <a ui-button routerLink="/misiones" intent="primary">
+          {{ i18n.t('common.exploreMissions') }}
+          <svg lucideArrowUpRight aria-hidden="true"></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+} @else if (!mission()) {
+  <section class="dm-page">
+    <div class="dm-container dm-detail-skeleton">
+      <div class="dm-skeleton dm-detail-skeleton__hero"></div>
+      <div class="dm-detail-layout">
+        <div class="dm-stack">
+          <div class="dm-skeleton dm-detail-skeleton__line"></div>
+          <div class="dm-skeleton dm-detail-skeleton__line"></div>
+          <div class="dm-skeleton dm-detail-skeleton__line dm-detail-skeleton__line--short"></div>
+        </div>
+        <div class="dm-skeleton dm-detail-skeleton__aside"></div>
+      </div>
+    </div>
+  </section>
+} @else {
+  @let m = mission()!;
+
+  <article class="dm-detail">
+    <header class="dm-detail-hero">
+      @if (m.photos.length) {
+        <img class="dm-detail-hero__image" [src]="m.photos[0]" [alt]="i18n.loc(m.title)" />
+      }
+      <div class="dm-detail-hero__scrim" aria-hidden="true"></div>
+      <div class="dm-container dm-detail-hero__inner">
+        <nav class="dm-detail-hero__crumbs" [attr.aria-label]="i18n.t('nav.missions')">
+          <a routerLink="/misiones">
+            <svg lucideArrowLeft aria-hidden="true"></svg>
+            {{ i18n.t('nav.missions') }}
+          </a>
+          <span aria-hidden="true">/</span>
+          <span>{{ i18n.loc(m.title) }}</span>
+        </nav>
+
+        <div class="dm-detail-hero__tags">
+          <dm-urgency-tag [urgency]="m.urgency" />
+          <span class="dm-tag dm-tag--ghost">{{ contract() }}</span>
+          @if (m.remote) {
+            <span class="dm-tag dm-tag--ghost">{{ i18n.t('common.remote') }}</span>
+          }
+          <span class="dm-tag dm-tag--ghost">{{ statusLabel(m.status) }}</span>
+        </div>
+
+        <h1 class="dm-detail-hero__title">{{ i18n.loc(m.title) }}</h1>
+        <p class="dm-detail-hero__summary">{{ i18n.loc(m.summary) }}</p>
+
+        <div class="dm-detail-hero__meta">
+          @if (organization(); as org) {
+            <a class="dm-detail-hero__org" [routerLink]="['/organizaciones', org.slug]">
+              <dm-organization-mark [organization]="org" size="sm" />
+              <span>{{ org.name }}</span>
+              @if (org.verified) {
+                <svg lucideBadgeCheck aria-hidden="true"></svg>
+              }
+            </a>
+          }
+          <span>
+            <svg lucideMapPin aria-hidden="true"></svg>
+            {{ place() }}
+          </span>
+          <span>
+            <svg lucideCalendarDays aria-hidden="true"></svg>
+            {{ dates() }}
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <div class="dm-detail-facts-bar">
+      <div class="dm-container">
+        <div class="dm-detail-facts">
+          <div>
+            <span class="dm-fact__label">{{ i18n.t('mission.start') }}</span>
+            <strong class="dm-fact__value">{{ i18n.formatDate(m.startDate) }}</strong>
+          </div>
+          <div>
+            <span class="dm-fact__label">{{ i18n.t('mission.duration') }}</span>
+            <strong class="dm-fact__value">{{ duration() }}</strong>
+          </div>
+          <div>
+            <span class="dm-fact__label">{{ i18n.t('mission.slots') }}</span>
+            <strong class="dm-fact__value">{{ i18n.t('mission.slotsValue', { filled: m.slots.filled, total: m.slots.total }) }}</strong>
+          </div>
+          <div>
+            <span class="dm-fact__label">{{ i18n.t('mission.languages') }}</span>
+            <strong class="dm-fact__value">{{ m.languages.length }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dm-page dm-detail__page">
+      <div class="dm-container">
+        <div class="dm-detail-layout">
+          <main class="dm-detail-main">
+            <section class="dm-detail-section">
+              <p class="dm-eyebrow">{{ i18n.t('mission.overview') }}</p>
+              <h2>{{ i18n.loc(m.title) }}</h2>
+              <div class="dm-prose">
+                <p>{{ i18n.loc(m.description) }}</p>
+              </div>
+              @if (roleLabels().length) {
+                <div class="dm-detail__chips">
+                  @for (role of roleLabels(); track role) {
+                    <span class="dm-tag dm-tag--sand">{{ role }}</span>
+                  }
+                </div>
+              }
+            </section>
+
+            <section class="dm-detail-section">
+              <p class="dm-eyebrow">{{ i18n.t('mission.responsibilities') }}</p>
+              <h2>{{ i18n.t('mission.responsibilities') }}</h2>
+              <ul class="dm-list-check" role="list">
+                @for (item of m.responsibilities; track $index) {
+                  <li>
+                    <svg lucideCheck aria-hidden="true"></svg>
+                    <span>{{ i18n.loc(item) }}</span>
+                  </li>
+                }
+              </ul>
+            </section>
+
+            <section class="dm-detail-section">
+              <p class="dm-eyebrow">{{ i18n.t('mission.requirements') }}</p>
+              <h2>{{ i18n.t('mission.requirements') }}</h2>
+              <ul class="dm-list-check" role="list">
+                @for (item of m.requirements; track $index) {
+                  <li>
+                    <svg lucideCheck aria-hidden="true"></svg>
+                    <span>{{ i18n.loc(item) }}</span>
+                  </li>
+                }
+              </ul>
+
+              @if (m.languages.length) {
+                <h3 class="dm-detail__subhead">
+                  <svg lucideLanguages aria-hidden="true"></svg>
+                  {{ i18n.t('mission.languages') }}
+                </h3>
+                <div class="dm-detail__chips">
+                  @for (language of m.languages; track language.code) {
+                    <span class="dm-tag">{{ languageName(language.code) }} · {{ levelName(language.minLevel) }}</span>
+                  }
+                </div>
+              }
+            </section>
+
+            <section class="dm-detail-section">
+              <p class="dm-eyebrow">{{ i18n.t('mission.benefits') }}</p>
+              <h2>{{ i18n.t('mission.benefits') }}</h2>
+              <ul class="dm-list-check" role="list">
+                @for (item of m.benefits; track $index) {
+                  <li>
+                    <svg lucideCheck aria-hidden="true"></svg>
+                    <span>{{ i18n.loc(item) }}</span>
+                  </li>
+                }
+              </ul>
+
+              <div class="dm-logistics">
+                <h3 class="dm-detail__subhead">
+                  <svg lucideTruck aria-hidden="true"></svg>
+                  {{ i18n.t('mission.logistics') }}
+                </h3>
+                <div class="dm-logistics__grid">
+                  <div class="dm-logistics__item" [class.is-included]="m.logistics.housing">
+                    <svg lucideHandHeart aria-hidden="true"></svg>
+                    <span>{{ i18n.t('mission.housing') }}</span>
+                    <strong>{{ i18n.t(m.logistics.housing ? 'mission.included' : 'mission.notIncluded') }}</strong>
+                  </div>
+                  <div class="dm-logistics__item" [class.is-included]="m.logistics.travel">
+                    <svg lucideGlobe aria-hidden="true"></svg>
+                    <span>{{ i18n.t('mission.travel') }}</span>
+                    <strong>{{ i18n.t(m.logistics.travel ? 'mission.included' : 'mission.notIncluded') }}</strong>
+                  </div>
+                  <div class="dm-logistics__item" [class.is-included]="m.logistics.insurance">
+                    <svg lucideShieldCheck aria-hidden="true"></svg>
+                    <span>{{ i18n.t('mission.insurance') }}</span>
+                    <strong>{{ i18n.t(m.logistics.insurance ? 'mission.included' : 'mission.notIncluded') }}</strong>
+                  </div>
+                  @if (m.logistics.stipend) {
+                    <div class="dm-logistics__item is-included">
+                      <svg lucideClipboardList aria-hidden="true"></svg>
+                      <span>{{ i18n.t('mission.stipend') }}</span>
+                      <strong>{{ i18n.loc(m.logistics.stipend) }}</strong>
+                    </div>
+                  }
+                </div>
+                <p class="dm-logistics__note">{{ i18n.loc(m.logistics.notes) }}</p>
+              </div>
+            </section>
+
+            @if (m.team.length) {
+              <section class="dm-detail-section">
+                <p class="dm-eyebrow">{{ i18n.t('mission.team') }}</p>
+                <h2>{{ i18n.t('mission.team') }}</h2>
+                <div class="dm-team">
+                  @for (member of m.team; track member.name) {
+                    <div class="dm-team__member">
+                      <img [src]="member.avatar" [alt]="member.name" loading="lazy" />
+                      <div>
+                        <strong>{{ member.name }}</strong>
+                        <span>{{ i18n.loc(member.role) }}</span>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </section>
+            }
+
+            @if (organization(); as org) {
+              <section class="dm-detail-section">
+                <p class="dm-eyebrow">{{ i18n.t('mission.organization') }}</p>
+                <h2>{{ i18n.t('mission.aboutOrg') }}</h2>
+                <div class="dm-org-card">
+                  <dm-organization-mark [organization]="org" size="lg" />
+                  <div class="dm-org-card__copy">
+                    <div class="dm-org-card__title">
+                      <h3>{{ org.name }}</h3>
+                      @if (org.verified) {
+                        <span class="dm-tag dm-tag--ghost">
+                          <svg lucideBadgeCheck aria-hidden="true"></svg>
+                          {{ i18n.t('common.verified') }}
+                        </span>
+                      }
+                    </div>
+                    <p>{{ i18n.loc(org.description) }}</p>
+                    <div class="dm-detail__chips">
+                      @for (focus of org.focusAreas; track $index) {
+                        <span class="dm-tag dm-tag--sand">{{ i18n.loc(focus) }}</span>
+                      }
+                    </div>
+                    <div class="dm-org-card__meta">
+                      <span>{{ i18n.t('org.rating', { rating: org.rating, count: org.reviewCount }) }}</span>
+                      <span>{{ i18n.t('org.founded', { year: org.founded }) }}</span>
+                      <a class="dm-link-arrow" [routerLink]="['/organizaciones', org.slug]">
+                        {{ i18n.t('common.viewDetails') }}
+                        <svg lucideArrowUpRight aria-hidden="true"></svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            }
+
+            <section class="dm-detail-section">
+              <p class="dm-eyebrow">{{ i18n.t('mission.location') }}</p>
+              <h2>{{ i18n.t('mission.location') }}</h2>
+              <div class="dm-detail__map">
+                <dm-world-map [missions]="missionList()" height="300px" />
+              </div>
+              <div class="dm-fact-grid dm-detail__place-facts">
+                <div class="dm-fact">
+                  <span class="dm-fact__label">{{ i18n.t('common.location') }}</span>
+                  <span class="dm-fact__value">{{ place() }}</span>
+                </div>
+                <div class="dm-fact">
+                  <span class="dm-fact__label">{{ i18n.t('common.region') }}</span>
+                  <span class="dm-fact__value">{{ regionLabel(m.region) }}</span>
+                </div>
+                <div class="dm-fact">
+                  <span class="dm-fact__label">{{ i18n.t('mission.dates') }}</span>
+                  <span class="dm-fact__value">{{ dates() }}</span>
+                </div>
+                <div class="dm-fact">
+                  <span class="dm-fact__label">GPS</span>
+                  <span class="dm-fact__value dm-mono">{{ coords() }}</span>
+                </div>
+              </div>
+            </section>
+          </main>
+
+          <aside class="dm-detail-aside">
+            <div class="dm-aside-card dm-apply-card">
+              <div class="dm-apply-card__head">
+                <div>
+                  <p class="dm-eyebrow">{{ i18n.t('common.match') }}</p>
+                  <h2>{{ i18n.t('mission.applyTitle') }}</h2>
+                </div>
+                @if (match(); as match) {
+                  <dm-score-ring [score]="match.score" [size]="92" />
+                }
+              </div>
+
+              @if (match(); as match) {
+                <ul class="dm-apply-card__reasons">
+                  @for (reason of match.reasons; track $index) {
+                    <li>
+                      <svg lucideCheck aria-hidden="true"></svg>
+                      <span>{{ i18n.loc(reason) }}</span>
+                    </li>
+                  }
+                </ul>
+              } @else {
+                <p class="dm-apply-card__sub">{{ i18n.t('mission.applySub') }}</p>
+              }
+
+              <div class="dm-apply-card__slots">
+                <div class="dm-apply-card__slots-head">
+                  <span>{{ i18n.t('mission.slots') }}</span>
+                  <strong>{{ openSlots() }} / {{ m.slots.total }}</strong>
+                </div>
+                <div class="dm-slots-bar" aria-hidden="true">
+                  <span [style.width.%]="filledPercent()"></span>
+                </div>
+                <p>{{ i18n.t('mission.slotsValue', { filled: m.slots.filled, total: m.slots.total }) }}</p>
+              </div>
+
+              <div class="dm-apply-card__deadline">
+                <svg lucideCalendarDays aria-hidden="true"></svg>
+                <span>{{ i18n.t('mission.deadline') }} <strong>{{ i18n.formatDate(m.startDate) }}</strong></span>
+              </div>
+
+              @if (applied()) {
+                <div class="dm-apply-card__status">
+                  <span [class]="applicationStatusClass()">{{ applicationStatus() }}</span>
+                  <a ui-button routerLink="/postulaciones" intent="primary" block>
+                    {{ i18n.t('apply.viewApplications') }}
+                  </a>
+                </div>
+              } @else if (auth.isAuthenticated()) {
+                <button ui-button intent="primary" size="lg" block (click)="openApplication()">
+                  {{ i18n.t('common.applyNow') }}
+                  <svg lucideArrowUpRight aria-hidden="true"></svg>
+                </button>
+              } @else {
+                <a
+                  ui-button
+                  intent="primary"
+                  size="lg"
+                  block
+                  routerLink="/entrar"
+                  [queryParams]="{ returnUrl: '/misiones/' + m.slug + '/postular' }"
+                >
+                  {{ i18n.t('apply.loginToApply') }}
+                  <svg lucideArrowUpRight aria-hidden="true"></svg>
+                </a>
+                <p class="dm-apply-card__login-note">{{ i18n.t('apply.loginToApplyBody') }}</p>
+              }
+
+              <div class="dm-apply-card__actions">
+                <button ui-button variant="outline" intent="neutral" size="sm" (click)="onSave()">
+                  <svg lucideHeart aria-hidden="true"></svg>
+                  {{ saved.isSaved(m.id) ? i18n.t('common.saved') : i18n.t('common.save') }}
+                </button>
+                <button ui-button variant="outline" intent="neutral" size="sm" (click)="share()">
+                  <svg lucideArrowUpRight aria-hidden="true"></svg>
+                  {{ i18n.t('common.share') }}
+                </button>
+              </div>
+
+              <p class="dm-apply-card__privacy">
+                <svg lucideShieldCheck aria-hidden="true"></svg>
+                {{ i18n.t('profile.documentsBody') }}
+              </p>
+            </div>
+
+            <div class="dm-aside-card dm-fact-grid">
+              <div class="dm-fact">
+                <span class="dm-fact__label">{{ i18n.t('mission.start') }}</span>
+                <span class="dm-fact__value">{{ i18n.formatDate(m.startDate) }}</span>
+              </div>
+              <div class="dm-fact">
+                <span class="dm-fact__label">{{ i18n.t('mission.end') }}</span>
+                <span class="dm-fact__value">{{ i18n.formatDate(m.endDate) }}</span>
+              </div>
+              <div class="dm-fact">
+                <span class="dm-fact__label">{{ i18n.t('mission.duration') }}</span>
+                <span class="dm-fact__value">{{ duration() }}</span>
+              </div>
+              <div class="dm-fact">
+                <span class="dm-fact__label">{{ i18n.t('common.contract') }}</span>
+                <span class="dm-fact__value">{{ contract() }}</span>
+              </div>
+            </div>
+
+            <button class="dm-report" type="button" (click)="report()">
+              <svg lucideInfo aria-hidden="true"></svg>
+              {{ i18n.t('mission.report') }}
+            </button>
+          </aside>
+        </div>
+      </div>
+    </div>
+
+    @if (similar().length) {
+      <section class="dm-section dm-section--ink dm-detail-similar">
+        <div class="dm-container">
+          <div class="dm-section-head">
+            <div class="dm-section-head__copy">
+              <p class="dm-eyebrow dm-eyebrow--paper">{{ i18n.t('mission.similar') }}</p>
+              <h2>{{ i18n.t('mission.similar') }}</h2>
+            </div>
+            <div class="dm-section-head__aside">
+              <a class="dm-link-arrow" routerLink="/misiones">
+                {{ i18n.t('common.viewAll') }}
+                <svg lucideArrowUpRight aria-hidden="true"></svg>
+              </a>
+            </div>
+          </div>
+          <div class="dm-results-grid dm-detail-similar__grid">
+            @for (item of similar(); track item.id) {
+              <dm-mission-card
+                [mission]="item"
+                [organization]="orgFor(item)"
+                [match]="matchFor(item)"
+                [saved]="saved.isSaved(item.id)"
+                (saveToggle)="onSimilarSave($event)"
+              />
+            }
+          </div>
+        </div>
+      </section>
+    }
+  </article>
+}

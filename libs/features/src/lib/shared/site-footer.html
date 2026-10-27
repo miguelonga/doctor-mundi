@@ -1,0 +1,62 @@
+<footer class="dm-footer">
+  <div class="dm-container dm-footer__top">
+    <div class="dm-footer__brand">
+      <dm-logo [inverted]="true" />
+      <p>{{ i18n.t('app.tagline') }}</p>
+      <a class="dm-footer__mail" href="mailto:hola@doctormundi.org">
+        <svg lucideMail aria-hidden="true"></svg>
+        hola@doctormundi.org
+      </a>
+    </div>
+
+    <div class="dm-footer__col">
+      <h2>{{ i18n.t('footer.explore') }}</h2>
+      <a routerLink="/misiones">{{ i18n.t('nav.missions') }}</a>
+      <a routerLink="/organizaciones">{{ i18n.t('nav.organizations') }}</a>
+      <a routerLink="/como-funciona">{{ i18n.t('nav.how') }}</a>
+    </div>
+
+    <div class="dm-footer__col">
+      <h2>{{ i18n.t('footer.volunteers') }}</h2>
+      <a routerLink="/crear-cuenta">{{ i18n.t('common.createProfile') }}</a>
+      <a routerLink="/deseos">{{ i18n.t('nav.wishes') }}</a>
+      <a routerLink="/postulaciones">{{ i18n.t('nav.applications') }}</a>
+    </div>
+
+    <div class="dm-footer__col">
+      <h2>{{ i18n.t('footer.legal') }}</h2>
+      <a routerLink="/como-funciona">{{ i18n.t('footer.privacy') }}</a>
+      <a routerLink="/como-funciona">{{ i18n.t('footer.terms') }}</a>
+      <a routerLink="/como-funciona">{{ i18n.t('footer.accessibility') }}</a>
+      <a routerLink="/como-funciona">{{ i18n.t('footer.contact') }}</a>
+    </div>
+
+    <div class="dm-footer__news">
+      <h2>{{ i18n.t('landing.newsletterTitle') }}</h2>
+      <p>{{ i18n.t('landing.newsletterBody') }}</p>
+      @if (subscribed()) {
+        <p class="dm-footer__subscribed">{{ i18n.t('common.subscribed') }}</p>
+      } @else {
+        <form class="dm-footer__form" (submit)="$event.preventDefault(); subscribe()">
+          <label class="dm-sr-only" for="dm-newsletter">{{ i18n.t('common.email') }}</label>
+          <ui-input
+            id="dm-newsletter"
+            type="email"
+            name="newsletter"
+            [placeholder]="i18n.t('auth.emailPlaceholder')"
+            [value]="email()"
+            (valueChange)="email.set($event)"
+          />
+          <button ui-button type="submit" intent="accent" size="sm" [attr.aria-label]="i18n.t('common.subscribe')">
+            <svg lucideArrowRight aria-hidden="true"></svg>
+          </button>
+        </form>
+      }
+    </div>
+  </div>
+
+  <div class="dm-container dm-footer__bottom">
+    <span>{{ i18n.t('footer.rights', { year: year }) }}</span>
+    <span>{{ i18n.t('footer.note') }}</span>
+  </div>
+</footer>

@@ -1,0 +1,14 @@
+:host {
+  display: block;
+}
+
+main {
+  min-height: 60vh;
+  outline: none;
+}
+
+@media (max-width: 900px) {
+  .dm-main--chrome {
+    padding-bottom: 4.1rem;
+  }
+}

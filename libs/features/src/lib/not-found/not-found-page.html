@@ -1,0 +1,57 @@
+<section class="dm-404">
+  <div class="dm-404__grid" aria-hidden="true"></div>
+  <div class="dm-container dm-404__inner">
+    <main class="dm-404__copy">
+      <p class="dm-eyebrow">{{ i18n.t('notFound.eyebrow') }}</p>
+      <div class="dm-404__code" aria-hidden="true">
+        <span>4</span>
+        <span class="dm-404__compass"><svg lucideCompass></svg></span>
+        <span>4</span>
+      </div>
+      <h1>{{ i18n.t('notFound.pageTitle') }}</h1>
+      <p class="dm-404__body">{{ i18n.t('notFound.pageBody') }}</p>
+      <div class="dm-404__actions">
+        <a ui-button intent="primary" routerLink="/">
+          {{ i18n.t('notFound.home') }}
+          <svg lucideArrowRight aria-hidden="true"></svg>
+        </a>
+        <a ui-button variant="outline" intent="neutral" routerLink="/misiones">
+          {{ i18n.t('notFound.explore') }}
+          <svg lucideArrowUpRight aria-hidden="true"></svg>
+        </a>
+      </div>
+    </main>
+
+    <aside class="dm-404__aside">
+      <div class="dm-404__map-card">
+        <div class="dm-404__map-head">
+          <span>{{ i18n.t('notFound.area') }}</span>
+          <svg lucideMapPin aria-hidden="true"></svg>
+        </div>
+        <div class="dm-404__map" aria-hidden="true">
+          <div class="dm-404__crosshair"></div>
+          <span class="dm-404__coord dm-404__coord--tl">17° 42′</span>
+          <span class="dm-404__coord dm-404__coord--br">03° 18′</span>
+          <span class="dm-404__coord dm-404__coord--tr">DM / 404</span>
+        </div>
+        <p>{{ i18n.t('notFound.coordinates') }}</p>
+      </div>
+
+      <nav class="dm-404__links" [attr.aria-label]="i18n.t('notFound.quickLinks')">
+        <span>{{ i18n.t('notFound.quickLinks') }}</span>
+        <a routerLink="/misiones">
+          {{ i18n.t('nav.missions') }}
+          <svg lucideArrowUpRight aria-hidden="true"></svg>
+        </a>
+        <a routerLink="/organizaciones">
+          {{ i18n.t('nav.organizations') }}
+          <svg lucideArrowUpRight aria-hidden="true"></svg>
+        </a>
+        <a routerLink="/como-funciona">
+          {{ i18n.t('nav.how') }}
+          <svg lucideArrowUpRight aria-hidden="true"></svg>
+        </a>
+      </nav>
+    </aside>
+  </div>
+</section>

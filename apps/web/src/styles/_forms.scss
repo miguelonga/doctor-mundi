@@ -1,0 +1,239 @@
+// -----------------------------------------------------------------------------
+// Tahoe Forms · Atlas de guardia theme
+// -----------------------------------------------------------------------------
+
+tf-form .tf-form {
+  gap: 1.6rem;
+}
+
+tf-form .tf-form__header {
+  gap: 0.5rem;
+}
+
+tf-form .tf-form__title {
+  font-family: var(--dm-font-display);
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+
+tf-form .tf-form__description {
+  max-width: 58ch;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--dm-ink-soft);
+}
+
+tf-form .tf-stepper {
+  gap: 0.35rem;
+  padding: 0.15rem 0 0.35rem;
+}
+
+tf-form .tf-stepper__item {
+  gap: 0.48rem;
+  min-width: 0;
+}
+
+tf-form .tf-stepper__marker {
+  display: inline-grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid var(--dm-rule-strong);
+  border-radius: 1px;
+  background: var(--dm-paper-raised);
+  color: var(--dm-ink-muted);
+  font-family: var(--dm-font-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+}
+
+tf-form .tf-stepper__label {
+  font-family: var(--dm-font-ui);
+  font-size: 0.58rem;
+  font-weight: 750;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dm-ink-muted);
+}
+
+tf-form .tf-stepper__item[data-status='current'] .tf-stepper__marker {
+  border-color: var(--dm-signal);
+  background: var(--dm-signal);
+  color: #fff8f4;
+}
+
+tf-form .tf-stepper__item[data-status='current'] .tf-stepper__label {
+  color: var(--dm-ink);
+}
+
+tf-form .tf-stepper__item[data-status='complete'] .tf-stepper__marker {
+  border-color: var(--dm-petrol-700);
+  background: var(--dm-petrol-700);
+  color: var(--dm-paper-raised);
+}
+
+tf-form .tf-stepper__item[data-status='complete'] .tf-stepper__label {
+  color: var(--dm-petrol-700);
+}
+
+tf-form .tf-form__progress {
+  width: 100%;
+}
+
+tf-form ui-progress {
+  --ui-progress-height: 3px;
+  --ui-progress-bg: var(--dm-rule);
+  --ui-progress-fill: var(--dm-petrol-600);
+  --ui-progress-radius: 0;
+}
+
+tf-form .tf-form__step-title {
+  font-family: var(--dm-font-display);
+  font-size: clamp(1.65rem, 2.4vw, 2.15rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+tf-form .tf-form__step-count {
+  font-family: var(--dm-font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dm-ink-muted);
+}
+
+tf-form .tf-form__body {
+  gap: 1.3rem;
+}
+
+tf-form .tf-form__grid {
+  gap: 1.2rem 1.1rem;
+}
+
+tf-form .tf-field {
+  display: grid;
+  align-content: start;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+tf-form .tf-field__label {
+  font-family: var(--dm-font-ui);
+  font-size: 0.64rem;
+  font-weight: 750;
+  letter-spacing: 0.11em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: var(--dm-ink-muted);
+}
+
+tf-form .tf-field__required {
+  color: var(--dm-signal);
+}
+
+tf-form .tf-field__hint {
+  font-size: 0.74rem;
+  line-height: 1.4;
+  color: var(--dm-ink-muted);
+}
+
+tf-form .tf-field__error {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--dm-signal-700);
+}
+
+tf-form .tf-field__control {
+  min-width: 0;
+}
+
+tf-form .tf-form__actions {
+  gap: 0.65rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--dm-rule);
+}
+
+tf-form .tf-form__actions--wizard {
+  justify-content: space-between;
+}
+
+tf-form .tf-form__footer {
+  border-top: 1px solid var(--dm-rule);
+  padding-top: 1rem;
+}
+
+tf-form .tf-summary {
+  border: 1px solid var(--dm-rule);
+  background: var(--dm-paper);
+}
+
+tf-form .tf-summary__row {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.55fr) minmax(0, 1fr);
+  gap: 1rem;
+  padding: 0.65rem 0.8rem;
+  border-bottom: 1px solid var(--dm-rule);
+}
+
+tf-form .tf-summary__row:last-child {
+  border-bottom: 0;
+}
+
+tf-form .tf-summary__term {
+  font-size: 0.62rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dm-ink-muted);
+}
+
+tf-form .tf-summary__desc {
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--dm-ink);
+}
+
+tf-form .tf-summary__empty {
+  padding: 1rem;
+  font-size: 0.82rem;
+  color: var(--dm-ink-muted);
+}
+
+tf-form .tf-form__empty {
+  padding: 1.5rem;
+  border: 1px dashed var(--dm-rule-strong);
+  color: var(--dm-ink-muted);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 640px) {
+  tf-form .tf-stepper__label {
+    display: none;
+  }
+
+  tf-form .tf-stepper {
+    gap: 0.65rem;
+  }
+
+  #main tf-form .tf-form__actions--wizard {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  #main tf-form .tf-form__actions--wizard > * {
+    width: 100%;
+    min-width: 0;
+  }
+
+  #main tf-form .tf-form__actions--wizard > .tf-form__step-count {
+    display: none;
+  }
+
+  #main tf-form .tf-form__actions--wizard .ui-button__content {
+    white-space: normal;
+    text-align: center;
+  }
+}

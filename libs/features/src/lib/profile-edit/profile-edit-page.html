@@ -1,0 +1,91 @@
+@if (loading() && !profile()) {
+  <section class="dm-page">
+    <div class="dm-container dm-edit-skeleton">
+      <div class="dm-skeleton dm-edit-skeleton__head"></div>
+      <div class="dm-skeleton dm-edit-skeleton__body"></div>
+    </div>
+  </section>
+} @else if (profile(); as p) {
+  <section class="dm-page dm-edit">
+    <div class="dm-container">
+      <header class="dm-edit__head">
+        <div>
+          <a class="dm-edit__back" routerLink="/perfil">
+            <svg lucideArrowLeft aria-hidden="true"></svg>
+            {{ i18n.t('profile.title') }}
+          </a>
+          <h1>{{ i18n.t('profile.editTitle') }}</h1>
+          <p>{{ i18n.t('profile.editSub') }}</p>
+        </div>
+        <dm-language-switcher (languageChange)="onLanguageChange()" />
+      </header>
+
+      <div class="dm-edit__grid">
+        <main class="dm-edit__form">
+          <div class="dm-edit__form-head">
+            <div class="dm-edit__form-mark">
+              <svg lucideSparkles aria-hidden="true"></svg>
+            </div>
+            <p>{{ i18n.t('profile.editNote') }}</p>
+          </div>
+
+          <tf-form
+            dmDateFields
+            [config]="config()"
+            [model]="model()"
+            [attr.aria-label]="i18n.t('profile.editTitle')"
+            (valueChange)="onValueChange($event)"
+            (formSubmit)="submit($event)"
+          />
+        </main>
+
+        <aside class="dm-edit__aside">
+          <div class="dm-edit-preview">
+            <div class="dm-edit-preview__cover" aria-hidden="true"></div>
+            <div class="dm-edit-preview__identity">
+              <ui-avatar [src]="p.avatar" [name]="p.name" size="lg" shape="rounded" />
+              <div>
+                <strong>{{ formValues()?.['name'] || p.name }}</strong>
+                <span>{{ formValues()?.['headline'] || i18n.loc(p.headline) }}</span>
+              </div>
+            </div>
+            <div class="dm-edit-preview__completion">
+              <div class="dm-edit-preview__completion-head">
+                <span>{{ i18n.t('profile.completionTitle') }}</span>
+                <strong>{{ completion() }}%</strong>
+              </div>
+              <div class="dm-edit-preview__track">
+                <span [style.width]="completion() + '%'"></span>
+              </div>
+              <p>{{ i18n.t('profile.completionSub') }}</p>
+            </div>
+            <ul class="dm-edit-checklist">
+              @for (check of checks(); track check.key) {
+                <li [class.is-done]="check.done">
+                  @if (check.done) {
+                    <svg lucideCheck aria-hidden="true"></svg>
+                  } @else {
+                    <svg lucideCircle aria-hidden="true"></svg>
+                  }
+                  {{ i18n.t(check.label) }}
+                </li>
+              }
+            </ul>
+          </div>
+
+          <a class="dm-edit__cancel" routerLink="/perfil">{{ i18n.t('common.cancel') }}</a>
+        </aside>
+      </div>
+    </div>
+  </section>
+} @else {
+  <section class="dm-page">
+    <div class="dm-container">
+      <div class="dm-empty">
+        <h1>{{ i18n.t('profile.editTitle') }}</h1>
+        <p>{{ i18n.t('common.error') }}</p>
+        <a ui-button routerLink="/perfil" intent="primary">{{ i18n.t('profile.title') }}</a>
+      </div>
+    </div>
+  </section>
+}

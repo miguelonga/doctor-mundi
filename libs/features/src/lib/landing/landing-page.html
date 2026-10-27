@@ -1,0 +1,451 @@
+<section class="dm-banner-wrap">
+  <div class="dm-container">
+    <div class="dm-banner">
+      <span class="dm-banner__label">
+        <i aria-hidden="true"></i>
+        {{ i18n.t('landing.live') }}
+      </span>
+      <p>{{ i18n.t('landing.banner') }}</p>
+      <a routerLink="/misiones" class="dm-banner__cta">
+        {{ i18n.t('landing.bannerCta') }}
+        <svg lucideArrowRight aria-hidden="true"></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="dm-hero">
+  <div class="dm-container dm-hero__grid">
+    <div class="dm-hero__copy">
+      <p class="dm-eyebrow">{{ i18n.t('landing.heroEyebrow') }}</p>
+      <h1 class="dm-display dm-hero__title">
+        <span>{{ i18n.t('landing.heroLead') }}</span>
+        <span class="dm-hero__tail">{{ i18n.t('landing.heroTail') }}</span>
+      </h1>
+      <p class="dm-lede">{{ i18n.t('landing.heroSub') }}</p>
+
+      <form class="dm-search" (submit)="search(); $event.preventDefault()">
+        <div class="dm-search__field">
+          <span class="dm-search__label">{{ i18n.t('landing.searchRole') }}</span>
+          <ui-select [value]="role()" (valueChange)="role.set($event)" [attr.aria-label]="i18n.t('landing.searchRole')">
+            <option value="all">{{ i18n.t('common.all') }}</option>
+            @for (option of roleOptions(); track option.id) {
+              <option [value]="option.id">{{ i18n.loc(option.label) }}</option>
+            }
+          </ui-select>
+        </div>
+        <div class="dm-search__field">
+          <span class="dm-search__label">{{ i18n.t('landing.searchCountry') }}</span>
+          <ui-select [value]="country()" (valueChange)="country.set($event)" [attr.aria-label]="i18n.t('landing.searchCountry')">
+            <option value="all">{{ i18n.t('common.all') }}</option>
+            @for (option of countryOptions(); track option.code) {
+              <option [value]="option.code">{{ i18n.loc(option.label) }}</option>
+            }
+          </ui-select>
+        </div>
+        <div class="dm-search__field">
+          <span class="dm-search__label">{{ i18n.t('landing.searchWhen') }}</span>
+          <ui-select [value]="when()" (valueChange)="when.set($event)" [attr.aria-label]="i18n.t('landing.searchWhen')">
+            <option value="any">{{ i18n.t('landing.searchAny') }}</option>
+            <option value="30">{{ i18n.t('landing.when30') }}</option>
+            <option value="90">{{ i18n.t('landing.when90') }}</option>
+            <option value="180">{{ i18n.t('landing.when180') }}</option>
+          </ui-select>
+        </div>
+        <div class="dm-search__action">
+          <button ui-button type="submit" intent="primary" size="lg" block>
+            <svg lucideSearch aria-hidden="true"></svg>
+            {{ i18n.t('landing.searchCta') }}
+          </button>
+        </div>
+      </form>
+
+      <p class="dm-hero__note">
+        <svg lucideCheck aria-hidden="true"></svg>
+        {{ i18n.t('landing.heroNote') }}
+      </p>
+
+      <div class="dm-hero__ledger">
+        <div>
+          <strong>{{ stats().openMissions }}</strong>
+          <span>{{ i18n.t('landing.statsMissions') }}</span>
+        </div>
+        <div>
+          <strong>{{ stats().countries }}</strong>
+          <span>{{ i18n.t('landing.statsCountries') }}</span>
+        </div>
+        <div>
+          <strong>{{ stats().volunteers.toLocaleString(i18n.locale()) }}</strong>
+          <span>{{ i18n.t('landing.statsVolunteers') }}</span>
+        </div>
+        <div>
+          <strong>{{ stats().organizations }}</strong>
+          <span>{{ i18n.t('landing.statsOrganizations') }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dm-hero__map-col">
+      <div class="dm-hero__map">
+        <div class="dm-hero__map-bar">
+          <span class="dm-live"><i aria-hidden="true"></i>{{ i18n.t('landing.live') }}</span>
+          <span>{{ i18n.t('landing.mapTitle') }}</span>
+          <span class="dm-coords">{{ mapMissions().length }} / {{ stats().openMissions }}</span>
+        </div>
+        <dm-world-map [missions]="mapMissions()" height="clamp(390px, 53vh, 535px)" />
+        <div class="dm-hero__map-foot">
+          <span>{{ i18n.t('landing.mapSub', { count: stats().openMissions }) }}</span>
+          <a routerLink="/misiones" class="dm-link-arrow">
+            {{ i18n.t('landing.allMissions') }}
+            <svg lucideArrowUpRight aria-hidden="true"></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="dm-trusted">
+  <div class="dm-container">
+    <p class="dm-kicker">{{ i18n.t('landing.trustedBy') }}</p>
+    <div class="dm-trusted__row">
+      @for (organization of trustOrganizations(); track organization.id) {
+        <a class="dm-trusted__item" [routerLink]="['/organizaciones', organization.slug]">
+          <dm-organization-mark [organization]="organization" size="sm" />
+          <span>{{ organization.name }}</span>
+          @if (organization.verified) {
+            <svg lucideBadgeCheck aria-hidden="true"></svg>
+          }
+        </a>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="dm-section">
+  <div class="dm-container">
+    <div class="dm-section-head">
+      <div class="dm-section-head__copy">
+        <p class="dm-eyebrow dm-eyebrow--sand">{{ i18n.t('landing.featuredBadge') }}</p>
+        <h2>{{ i18n.t('landing.featuredTitle') }}</h2>
+        <p class="dm-lede">{{ i18n.t('landing.featuredSub') }}</p>
+      </div>
+      <a class="dm-link-arrow dm-section-head__aside" routerLink="/misiones">
+        {{ i18n.t('common.viewAll') }}
+        <svg lucideArrowRight aria-hidden="true"></svg>
+      </a>
+    </div>
+
+    @if (missionsStore.loading()) {
+      <div class="dm-grid dm-grid--3">
+        @for (item of [1, 2, 3]; track item) {
+          <div class="dm-skeleton dm-mission-skeleton"></div>
+        }
+      </div>
+    } @else {
+      <div class="dm-grid dm-grid--3">
+        @for (mission of featuredMissions(); track mission.id) {
+          <dm-mission-card
+            [mission]="mission"
+            [organization]="organizationById().get(mission.orgId) ?? null"
+            [match]="matches().get(mission.id) ?? null"
+            [saved]="saved.isSaved(mission.id)"
+            (saveToggle)="onSave($event)"
+          />
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<section class="dm-how dm-section">
+  <div class="dm-container">
+    <div class="dm-section-head dm-section-head--paper">
+      <div class="dm-section-head__copy">
+        <p class="dm-eyebrow dm-eyebrow--paper">{{ i18n.t('landing.howEyebrow') }}</p>
+        <h2>{{ i18n.t('landing.howTitle') }}</h2>
+        <p class="dm-lede dm-lede--paper">{{ i18n.t('landing.howSub') }}</p>
+      </div>
+      <a class="dm-link-arrow dm-link-arrow--paper dm-section-head__aside" routerLink="/como-funciona">
+        {{ i18n.t('landing.howCta') }}
+        <svg lucideArrowRight aria-hidden="true"></svg>
+      </a>
+    </div>
+
+    <ol class="dm-how__steps">
+      <li>
+        <span class="dm-how__num">01</span>
+        <span class="dm-how__icon"><svg lucideUserRound aria-hidden="true"></svg></span>
+        <h3>{{ i18n.t('landing.step1Title') }}</h3>
+        <p>{{ i18n.t('landing.step1Body') }}</p>
+      </li>
+      <li>
+        <span class="dm-how__num">02</span>
+        <span class="dm-how__icon"><svg lucideCompass aria-hidden="true"></svg></span>
+        <h3>{{ i18n.t('landing.step2Title') }}</h3>
+        <p>{{ i18n.t('landing.step2Body') }}</p>
+      </li>
+      <li>
+        <span class="dm-how__num">03</span>
+        <span class="dm-how__icon"><svg lucideSend aria-hidden="true"></svg></span>
+        <h3>{{ i18n.t('landing.step3Title') }}</h3>
+        <p>{{ i18n.t('landing.step3Body') }}</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="dm-section dm-section--paper">
+  <div class="dm-container">
+    <div class="dm-section-head">
+      <div class="dm-section-head__copy">
+        <p class="dm-eyebrow">{{ i18n.t('common.roles') }}</p>
+        <h2>{{ i18n.t('landing.rolesTitle') }}</h2>
+        <p class="dm-lede">{{ i18n.t('landing.rolesSub') }}</p>
+      </div>
+    </div>
+
+    @if (topRoles().length) {
+      <div class="dm-roles">
+        @for (role of topRoles(); track role.id) {
+          <a class="dm-role" routerLink="/misiones" (click)="goRole(role.id)">
+            <span class="dm-role__count">{{ role.count }}</span>
+            <span class="dm-role__icon">
+              @switch (role.id) {
+                @case ('doctor') {
+                  <svg lucideStethoscope aria-hidden="true"></svg>
+                }
+                @case ('nurse') {
+                  <svg lucideHeartPulse aria-hidden="true"></svg>
+                }
+                @case ('midwife') {
+                  <svg lucideBaby aria-hidden="true"></svg>
+                }
+                @case ('paramedic') {
+                  <svg lucideAmbulance aria-hidden="true"></svg>
+                }
+                @case ('pharmacist') {
+                  <svg lucidePill aria-hidden="true"></svg>
+                }
+                @case ('lab-tech') {
+                  <svg lucideMicroscope aria-hidden="true"></svg>
+                }
+                @case ('psychologist') {
+                  <svg lucideBrain aria-hidden="true"></svg>
+                }
+                @case ('logistics') {
+                  <svg lucideTruck aria-hidden="true"></svg>
+                }
+                @case ('translator') {
+                  <svg lucideLanguages aria-hidden="true"></svg>
+                }
+                @case ('public-health') {
+                  <svg lucideUsers aria-hidden="true"></svg>
+                }
+                @case ('nutrition') {
+                  <svg lucideHandHeart aria-hidden="true"></svg>
+                }
+                @default {
+                  <svg lucideActivity aria-hidden="true"></svg>
+                }
+              }
+            </span>
+            <span class="dm-role__label">{{ roleLabel(role.id) }}</span>
+            <span class="dm-role__meta">
+              {{ i18n.t('landing.rolesCount', { count: role.count }) }}
+              <svg lucideArrowUpRight aria-hidden="true"></svg>
+            </span>
+          </a>
+        }
+      </div>
+    } @else {
+      <div class="dm-roles">
+        @for (item of [1, 2, 3, 4, 5, 6]; track item) {
+          <div class="dm-skeleton dm-role-skeleton"></div>
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<section class="dm-section">
+  <div class="dm-container dm-trust">
+    <div class="dm-trust__intro">
+      <p class="dm-eyebrow">{{ i18n.t('common.trust') }}</p>
+      <h2>{{ i18n.t('landing.trustTitle') }}</h2>
+      <p class="dm-lede">{{ i18n.t('landing.trustSub') }}</p>
+      <div class="dm-seal" aria-hidden="true">
+        <span class="dm-seal__inner">
+          <strong>DM</strong>
+          <svg lucideBadgeCheck></svg>
+          <small>{{ i18n.t('landing.trustSeal') }}</small>
+        </span>
+      </div>
+    </div>
+
+    <div class="dm-trust__list">
+      <article class="dm-trust__item">
+        <span class="dm-trust__num">01</span>
+        <span class="dm-trust__icon"><svg lucideShieldCheck aria-hidden="true"></svg></span>
+        <div>
+          <h3>{{ i18n.t('landing.trust1Title') }}</h3>
+          <p>{{ i18n.t('landing.trust1Body') }}</p>
+        </div>
+      </article>
+      <article class="dm-trust__item">
+        <span class="dm-trust__num">02</span>
+        <span class="dm-trust__icon"><svg lucideBadgeCheck aria-hidden="true"></svg></span>
+        <div>
+          <h3>{{ i18n.t('landing.trust2Title') }}</h3>
+          <p>{{ i18n.t('landing.trust2Body') }}</p>
+        </div>
+      </article>
+      <article class="dm-trust__item">
+        <span class="dm-trust__num">03</span>
+        <span class="dm-trust__icon"><svg lucideFileText aria-hidden="true"></svg></span>
+        <div>
+          <h3>{{ i18n.t('landing.trust3Title') }}</h3>
+          <p>{{ i18n.t('landing.trust3Body') }}</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="dm-story dm-section">
+  <div class="dm-container dm-story__grid">
+    <div class="dm-story__copy">
+      <p class="dm-eyebrow dm-eyebrow--paper">{{ i18n.t('landing.storyEyebrow') }}</p>
+      <h2>{{ i18n.t('landing.storyTitle') }}</h2>
+      <p>{{ i18n.t('landing.storyBody') }}</p>
+      <div class="dm-story__author">
+        <img src="/images/avatar-marta.webp" [alt]="i18n.t('landing.quote1Name')" loading="lazy" />
+        <div>
+          <strong>{{ i18n.t('landing.storyAuthor') }}</strong>
+          <span>{{ i18n.t('landing.quote1Role') }}</span>
+        </div>
+      </div>
+      <a class="dm-link-arrow dm-link-arrow--paper" routerLink="/misiones">
+        {{ i18n.t('landing.storyCta') }}
+        <svg lucideArrowUpRight aria-hidden="true"></svg>
+      </a>
+    </div>
+
+    <aside class="dm-story__note">
+      <div class="dm-story__note-head">
+        <span class="dm-coords">02°N / 36°E</span>
+        <span class="dm-tag dm-tag--sand">{{ i18n.t('landing.storyEyebrow') }}</span>
+      </div>
+      <p class="dm-story__note-mark">“</p>
+      <p class="dm-story__note-quote">{{ i18n.t('landing.storyTitle') }}</p>
+      <div class="dm-story__note-rule"></div>
+      <p class="dm-story__note-meta">{{ i18n.t('landing.storyMeta') }}</p>
+    </aside>
+  </div>
+</section>
+
+<section class="dm-section dm-section--paper">
+  <div class="dm-container">
+    <div class="dm-section-head">
+      <div class="dm-section-head__copy">
+        <p class="dm-eyebrow">{{ i18n.t('landing.testimonialsEyebrow') }}</p>
+        <h2>{{ i18n.t('landing.testimonialsTitle') }}</h2>
+      </div>
+    </div>
+
+    <div class="dm-grid dm-grid--3">
+      <figure class="dm-quote">
+        <blockquote>{{ i18n.t('landing.quote1') }}</blockquote>
+        <figcaption>
+          <img src="/images/avatar-marta.webp" [alt]="i18n.t('landing.quote1Name')" loading="lazy" />
+          <div><strong>{{ i18n.t('landing.quote1Name') }}</strong><span>{{ i18n.t('landing.quote1Role') }}</span></div>
+        </figcaption>
+      </figure>
+      <figure class="dm-quote">
+        <blockquote>{{ i18n.t('landing.quote2') }}</blockquote>
+        <figcaption>
+          <img src="/images/avatar-tomas.webp" [alt]="i18n.t('landing.quote2Name')" loading="lazy" />
+          <div><strong>{{ i18n.t('landing.quote2Name') }}</strong><span>{{ i18n.t('landing.quote2Role') }}</span></div>
+        </figcaption>
+      </figure>
+      <figure class="dm-quote">
+        <blockquote>{{ i18n.t('landing.quote3') }}</blockquote>
+        <figcaption>
+          <img src="/images/avatar-amara.webp" [alt]="i18n.t('landing.quote3Name')" loading="lazy" />
+          <div><strong>{{ i18n.t('landing.quote3Name') }}</strong><span>{{ i18n.t('landing.quote3Role') }}</span></div>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="dm-section">
+  <div class="dm-container dm-faq">
+    <div class="dm-faq__intro">
+      <p class="dm-eyebrow">{{ i18n.t('landing.faqEyebrow') }}</p>
+      <h2>{{ i18n.t('landing.faqTitle') }}</h2>
+      <p class="dm-lede">{{ i18n.t('landing.faqSub') }}</p>
+      <p class="dm-faq__more">
+        {{ i18n.t('landing.faqMore') }}
+        <a href="mailto:hola@doctormundi.org">{{ i18n.t('landing.faqContact') }} →</a>
+      </p>
+    </div>
+
+    <div class="dm-faq__list">
+      <details class="dm-faq__item" name="dm-faq" open>
+        <summary><span>{{ i18n.t('landing.faq1Q') }}</span><svg lucidePlus aria-hidden="true"></svg></summary>
+        <p>{{ i18n.t('landing.faq1A') }}</p>
+      </details>
+      <details class="dm-faq__item" name="dm-faq">
+        <summary><span>{{ i18n.t('landing.faq2Q') }}</span><svg lucidePlus aria-hidden="true"></svg></summary>
+        <p>{{ i18n.t('landing.faq2A') }}</p>
+      </details>
+      <details class="dm-faq__item" name="dm-faq">
+        <summary><span>{{ i18n.t('landing.faq3Q') }}</span><svg lucidePlus aria-hidden="true"></svg></summary>
+        <p>{{ i18n.t('landing.faq3A') }}</p>
+      </details>
+      <details class="dm-faq__item" name="dm-faq">
+        <summary><span>{{ i18n.t('landing.faq4Q') }}</span><svg lucidePlus aria-hidden="true"></svg></summary>
+        <p>{{ i18n.t('landing.faq4A') }}</p>
+      </details>
+      <details class="dm-faq__item" name="dm-faq">
+        <summary><span>{{ i18n.t('landing.faq5Q') }}</span><svg lucidePlus aria-hidden="true"></svg></summary>
+        <p>{{ i18n.t('landing.faq5A') }}</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="dm-cta dm-section">
+  <div class="dm-container dm-cta__grid">
+    <div class="dm-cta__copy">
+      <p class="dm-eyebrow dm-eyebrow--paper">{{ i18n.t('landing.heroEyebrow') }}</p>
+      <h2>{{ i18n.t('landing.ctaTitle') }}</h2>
+      <p>{{ i18n.t('landing.ctaBody') }}</p>
+      <div class="dm-cta__actions">
+        <a
+          ui-button
+          intent="accent"
+          size="lg"
+          [routerLink]="auth.isAuthenticated() ? '/misiones' : '/crear-cuenta'"
+        >
+          {{ auth.isAuthenticated() ? i18n.t('common.exploreMissions') : i18n.t('landing.ctaButton') }}
+          <svg lucideArrowRight aria-hidden="true"></svg>
+        </a>
+        <a class="dm-cta__secondary" routerLink="/misiones">
+          {{ i18n.t('landing.ctaSecondary') }}
+          <svg lucideArrowUpRight aria-hidden="true"></svg>
+        </a>
+      </div>
+      <p class="dm-cta__note">{{ i18n.t('landing.ctaNote') }}</p>
+    </div>
+
+    <div class="dm-cta__stat">
+      <span class="dm-coords">DM / 2026</span>
+      <strong>{{ stats().openMissions }}</strong>
+      <span>{{ i18n.t('landing.ctaStat') }}</span>
+      <div class="dm-cta__stat-rule"></div>
+      <span class="dm-cta__stat-link">{{ i18n.t('landing.statsCountries') }} · {{ stats().countries }}</span>
+    </div>
+  </div>
+</section>

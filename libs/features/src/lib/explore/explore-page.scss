@@ -1,0 +1,119 @@
+.dm-explore__count {
+  margin-top: -0.15rem;
+  font-family: var(--dm-font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--dm-ink-muted);
+}
+
+.dm-filter-rail__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--dm-rule);
+  margin-bottom: 0.4rem;
+}
+
+.dm-filter-rail__head h2 {
+  font-family: var(--dm-font-display);
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.dm-filter-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.28rem;
+  border-radius: 999px;
+  background: var(--dm-signal);
+  color: #fff8f4;
+  font-family: var(--dm-font-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.dm-filter-form {
+  display: grid;
+}
+
+.dm-results {
+  min-width: 0;
+}
+
+.dm-results-bar__sort-label {
+  font-size: 0.6rem;
+  font-weight: 750;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dm-ink-muted);
+}
+
+.dm-explore__skeleton {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.dm-explore__map-skeleton,
+.dm-explore__card-skeleton {
+  border: 1px solid var(--dm-rule);
+  background:
+    linear-gradient(100deg, transparent 20%, color-mix(in srgb, var(--dm-paper-raised) 65%, transparent) 42%, transparent 64%),
+    var(--dm-paper-deep);
+  background-size: 220% 100%, 100% 100%;
+  animation: dm-shimmer 1.5s linear infinite;
+}
+
+.dm-explore__map-skeleton {
+  height: clamp(300px, 42vw, 480px);
+  margin-bottom: 1.1rem;
+}
+
+.dm-explore__card-skeleton {
+  height: 390px;
+}
+
+.dm-empty > svg {
+  width: 26px;
+  height: 26px;
+  color: var(--dm-signal);
+}
+
+@keyframes dm-shimmer {
+  to {
+    background-position: -120% 0, 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dm-explore__map-skeleton,
+  .dm-explore__card-skeleton {
+    animation: none;
+  }
+}
+
+
+.dm-date-input {
+  width: 100%;
+  min-width: 0;
+  height: var(--tahoe-control-height-md, 2.5rem);
+  padding: 0 0.55rem;
+  border: 1px solid var(--dm-rule-strong);
+  border-radius: 2px;
+  background: var(--dm-paper-raised);
+  color: var(--dm-ink);
+  font-family: var(--dm-font-ui);
+  font-size: 0.72rem;
+}
+
+.dm-date-input:focus-visible {
+  outline: 2px solid var(--tahoe-color-focus-ring, var(--dm-petrol-300));
+  outline-offset: 1px;
+  border-color: var(--dm-petrol-500);
+}

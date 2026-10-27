@@ -1,0 +1,351 @@
+<ng-template #filterFields>
+  <form class="dm-filter-form" (submit)="applyMobileFilters(); $event.preventDefault()">
+    <div class="dm-filter-group">
+      <label class="dm-filter-group__label" for="dm-explore-search">{{ i18n.t('common.search') }}</label>
+      <ui-input
+        id="dm-explore-search"
+        type="search"
+        [value]="qDraft()"
+        [placeholder]="i18n.t('explore.searchPlaceholder')"
+        (valueChange)="setQuery($event)"
+      />
+    </div>
+
+    <div class="dm-filter-group">
+      <span class="dm-filter-group__label">{{ i18n.t('common.role') }}</span>
+      <ui-select
+        [value]="filters().role"
+        [attr.aria-label]="i18n.t('common.role')"
+        (valueChange)="setRole($event)"
+      >
+        <option value="all">{{ i18n.t('filters.allRoles') }}</option>
+        @for (option of roleOptions(); track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </ui-select>
+    </div>
+
+    <div class="dm-filter-group">
+      <span class="dm-filter-group__label">{{ i18n.t('common.country') }}</span>
+      <ui-select
+        [value]="filters().country"
+        [attr.aria-label]="i18n.t('common.country')"
+        (valueChange)="updateFilters({ country: $event })"
+      >
+        <option value="all">{{ i18n.t('filters.allCountries') }}</option>
+        @for (option of countryOptions(); track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </ui-select>
+    </div>
+
+    <div class="dm-filter-group">
+      <span class="dm-filter-group__label">{{ i18n.t('common.region') }}</span>
+      <ui-select
+        [value]="filters().region"
+        [attr.aria-label]="i18n.t('common.region')"
+        (valueChange)="setRegion($event)"
+      >
+        <option value="all">{{ i18n.t('filters.allRegions') }}</option>
+        @for (option of regionOptions(); track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </ui-select>
+    </div>
+
+    <div class="dm-filter-group">
+      <span class="dm-filter-group__label">{{ i18n.t('common.language') }}</span>
+      <ui-select
+        [value]="filters().language"
+        [attr.aria-label]="i18n.t('common.language')"
+        (valueChange)="updateFilters({ language: $event })"
+      >
+        <option value="all">{{ i18n.t('filters.allLanguages') }}</option>
+        @for (option of languageOptions(); track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </ui-select>
+    </div>
+
+    <div class="dm-filter-group">
+      <span class="dm-filter-group__label">{{ i18n.t('common.urgency') }}</span>
+      <ui-select
+        [value]="filters().urgency"
+        [attr.aria-label]="i18n.t('common.urgency')"
+        (valueChange)="setUrgency($event)"
+      >
+        <option value="all">{{ i18n.t('filters.allUrgencies') }}</option>
+        @for (option of urgencyOptions(); track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </ui-select>
+    </div>
+
+    <div class="dm-filter-group">
+      <span class="dm-filter-group__label">{{ i18n.t('common.duration') }}</span>
+      <ui-select
+        [value]="filters().minDuration?.toString() ?? 'all'"
+        [attr.aria-label]="i18n.t('common.duration')"
+        (valueChange)="setDuration($event)"
+      >
+        <option value="all">{{ i18n.t('filters.anyDuration') }}</option>
+        <option value="4">{{ i18n.t('filters.min4') }}</option>
+        <option value="12">{{ i18n.t('filters.min12') }}</option>
+      </ui-select>
+    </div>
+
+    <div class="dm-filter-group">
+      <span class="dm-filter-group__label">{{ i18n.t('mission.dates') }}</span>
+      <div class="dm-filter-group__row">
+        <input
+          type="date"
+          class="dm-date-input"
+          [value]="filters().startFrom ?? ''"
+          [attr.aria-label]="i18n.t('filters.startFrom')"
+          (change)="setStartFrom($event)"
+        />
+        <input
+          type="date"
+          class="dm-date-input"
+          [value]="filters().startTo ?? ''"
+          [attr.aria-label]="i18n.t('filters.startTo')"
+          (change)="setStartTo($event)"
+        />
+      </div>
+    </div>
+
+    <div class="dm-filter-group">
+      <div class="dm-check-row">
+        <span class="dm-check-row__copy">
+          {{ i18n.t('explore.verifiedOnly') }}
+          <small>{{ i18n.t('filters.verifiedHint') }}</small>
+        </span>
+        <ui-checkbox
+          [checked]="filters().verified"
+          [attr.aria-label]="i18n.t('explore.verifiedOnly')"
+          (checkedChange)="updateFilters({ verified: $event })"
+        ></ui-checkbox>
+      </div>
+      <div class="dm-check-row">
+        <span class="dm-check-row__copy">
+          {{ i18n.t('explore.remoteOnly') }}
+          <small>{{ i18n.t('filters.remoteHint') }}</small>
+        </span>
+        <ui-checkbox
+          [checked]="filters().remote"
+          [attr.aria-label]="i18n.t('explore.remoteOnly')"
+          (checkedChange)="updateFilters({ remote: $event })"
+        ></ui-checkbox>
+      </div>
+    </div>
+
+    <div class="dm-filter-actions">
+      @if (activeFilterCount()) {
+        <button ui-button type="button" variant="outline" intent="neutral" size="sm" (click)="resetFilters()">
+          <svg lucideRotateCcw aria-hidden="true"></svg>
+          {{ i18n.t('filters.reset') }}
+        </button>
+      }
+      <button ui-button type="submit" intent="primary" size="sm">
+        {{ i18n.t('filters.apply') }}
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+<section class="dm-page dm-explore">
+  <div class="dm-container">
+    <header class="dm-page-head">
+      <div class="dm-page-head__copy">
+        <p class="dm-eyebrow">{{ i18n.t('landing.heroEyebrow') }}</p>
+        <h1>{{ i18n.t('explore.title') }}</h1>
+        <p class="dm-page-head__sub">{{ i18n.t('explore.sub') }}</p>
+        <p class="dm-explore__count">
+          {{ i18n.t('explore.count', { count: total(), countries: countriesCount() }) }}
+        </p>
+      </div>
+      <div class="dm-page-head__actions">
+        <button
+          ui-button
+          type="button"
+          variant="outline"
+          intent="neutral"
+          size="sm"
+          class="dm-filter-mobile-trigger"
+          (click)="filtersOpen.set(true)"
+        >
+          <svg lucideFunnel aria-hidden="true"></svg>
+          {{ i18n.t('common.filters') }}
+          @if (activeFilterCount()) {
+            <span class="dm-filter-count">{{ activeFilterCount() }}</span>
+          }
+        </button>
+        <div class="dm-view-toggle" role="group" [attr.aria-label]="i18n.t('explore.mapView')">
+          <button
+            type="button"
+            [attr.aria-pressed]="view() === 'map'"
+            (click)="setView('map')"
+          >
+            <svg lucideMap aria-hidden="true"></svg>
+            {{ i18n.t('explore.mapView') }}
+          </button>
+          <button
+            type="button"
+            [attr.aria-pressed]="view() === 'list'"
+            (click)="setView('list')"
+          >
+            <svg lucideList aria-hidden="true"></svg>
+            {{ i18n.t('explore.listView') }}
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="dm-filter-layout">
+      <aside class="dm-filter-rail" [attr.aria-label]="i18n.t('filters.title')">
+        <div class="dm-filter-rail__head">
+          <h2>{{ i18n.t('filters.title') }}</h2>
+          @if (activeFilterCount()) {
+            <span class="dm-filter-count">{{ activeFilterCount() }}</span>
+          }
+        </div>
+        <ng-container [ngTemplateOutlet]="filterFields" />
+      </aside>
+
+      <div class="dm-results">
+        <div class="dm-results-bar">
+          <span class="dm-results-bar__count">
+            {{ i18n.t('explore.results', { count: total() }) }}
+          </span>
+          <div class="dm-results-bar__tools">
+            <span class="dm-results-bar__sort-label">{{ i18n.t('common.sortBy') }}</span>
+            <ui-select
+              class="dm-results-bar__sort"
+              size="sm"
+              [value]="filters().sort"
+              [attr.aria-label]="i18n.t('common.sortBy')"
+              (valueChange)="setSort($event)"
+            >
+              <option value="relevance">{{ i18n.t('common.relevance') }}</option>
+              <option value="startDate">{{ i18n.t('common.startDate') }}</option>
+              <option value="duration">{{ i18n.t('common.duration') }}</option>
+              <option value="urgency">{{ i18n.t('common.urgency') }}</option>
+            </ui-select>
+          </div>
+        </div>
+
+        @if (loading()) {
+          <div class="dm-explore__skeleton">
+            @if (view() === 'map') {
+              <div class="dm-skeleton dm-explore__map-skeleton"></div>
+            }
+            <div class="dm-results-grid">
+              @for (item of [1, 2, 3, 4]; track item) {
+                <div class="dm-skeleton dm-explore__card-skeleton"></div>
+              }
+            </div>
+          </div>
+        } @else if (failed()) {
+          <div class="dm-empty">
+            <svg lucideMapPin aria-hidden="true"></svg>
+            <h2>{{ i18n.t('explore.loadError') }}</h2>
+            <p>{{ i18n.t('explore.loadErrorBody') }}</p>
+            <button ui-button intent="primary" (click)="retry()">{{ i18n.t('common.retry') }}</button>
+          </div>
+        } @else if (!missionsStore.missions().length) {
+          <div class="dm-empty">
+            <svg lucideSearch aria-hidden="true"></svg>
+            <h2>{{ i18n.t('explore.noResultsTitle') }}</h2>
+            <p>{{ i18n.t('explore.noResultsBody') }}</p>
+            <button ui-button variant="outline" intent="neutral" (click)="resetFilters()">
+              <svg lucideRotateCcw aria-hidden="true"></svg>
+              {{ i18n.t('common.clearAll') }}
+            </button>
+          </div>
+        } @else {
+          @if (view() === 'map') {
+            <div class="dm-results-map">
+              <dm-world-map [missions]="mapMissions()" height="clamp(300px, 42vw, 480px)" />
+            </div>
+          }
+
+          <div class="dm-results-grid">
+            @for (mission of missionsStore.missions(); track mission.id) {
+              <dm-mission-card
+                [mission]="mission"
+                [organization]="organizationFor(mission)"
+                [match]="matchFor(mission)"
+                [saved]="saved.isSaved(mission.id)"
+                (saveToggle)="onSave($event)"
+              />
+            }
+          </div>
+
+          @if ((metaInfo()?.totalPages ?? 1) > 1) {
+            <nav class="dm-pager" [attr.aria-label]="i18n.t('explore.results', { count: total() })">
+              <span class="dm-pager__summary">
+                {{ i18n.t('common.page') }} {{ filters().page }} {{ i18n.t('common.of') }} {{ metaInfo()?.totalPages }}
+              </span>
+              <button
+                type="button"
+                [disabled]="filters().page <= 1"
+                [attr.aria-label]="i18n.t('common.previousPage')"
+                (click)="setPage(filters().page - 1)"
+              >
+                <svg lucideChevronLeft aria-hidden="true"></svg>
+              </button>
+              @for (page of pages(); track page) {
+                <button
+                  type="button"
+                  [attr.aria-current]="page === filters().page ? 'page' : null"
+                  [attr.aria-label]="i18n.t('common.page') + ' ' + page"
+                  (click)="setPage(page)"
+                >
+                  {{ page }}
+                </button>
+              }
+              <button
+                type="button"
+                [disabled]="filters().page >= (metaInfo()?.totalPages ?? 1)"
+                [attr.aria-label]="i18n.t('common.nextPage')"
+                (click)="setPage(filters().page + 1)"
+              >
+                <svg lucideChevronRight aria-hidden="true"></svg>
+              </button>
+            </nav>
+          }
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+@if (filtersOpen()) {
+  <button
+    type="button"
+    class="dm-filter-backdrop"
+    [attr.aria-label]="i18n.t('filters.close')"
+    (click)="closeFilters()"
+  ></button>
+  <div class="dm-filter-drawer" role="dialog" aria-modal="true" [attr.aria-label]="i18n.t('filters.title')">
+    <div class="dm-filter-drawer__panel">
+      <div class="dm-filter-drawer__head">
+        <h2>{{ i18n.t('filters.title') }}</h2>
+        <button
+          ui-button
+          type="button"
+          variant="ghost"
+          intent="neutral"
+          size="sm"
+          shape="square"
+          iconOnly
+          [attr.aria-label]="i18n.t('filters.close')"
+          (click)="closeFilters()"
+        >
+          <svg lucideX aria-hidden="true"></svg>
+        </button>
+      </div>
+      <ng-container [ngTemplateOutlet]="filterFields" />
+    </div>
+  </div>
+}
