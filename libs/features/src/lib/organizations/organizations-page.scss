@@ -13,7 +13,7 @@
   gap: 1rem;
   margin-bottom: 1.4rem;
   padding-bottom: 1.1rem;
-  border-bottom: 1px solid var(--dm-rule);
+  border-bottom: 2px solid var(--dm-ink);
 }
 
 .dm-org-search {
@@ -44,8 +44,9 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.35rem 0.55rem 0.35rem 0.7rem;
-  border: 1px solid var(--dm-rule);
+  border: 2px solid var(--dm-ink);
   background: var(--dm-paper-raised);
+  box-shadow: 3px 3px 0 0 var(--dm-ink);
 }
 
 .dm-org-verified span {
@@ -55,7 +56,7 @@
 
 .dm-org-verified strong {
   font-size: 0.72rem;
-  font-weight: 650;
+  font-weight: 750;
   color: var(--dm-ink);
 }
 
@@ -67,7 +68,7 @@
 .dm-org-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.1rem;
+  gap: 1.4rem;
 }
 
 .dm-orgs-card {
@@ -75,24 +76,24 @@
   display: grid;
   gap: 1rem;
   padding: 1.25rem;
-  border: 1px solid var(--dm-rule);
+  border: 2px solid var(--dm-ink);
   background: var(--dm-paper-raised);
   color: var(--dm-ink);
-  transition: border-color 140ms ease, transform 140ms ease, box-shadow 140ms ease;
+  box-shadow: 5px 5px 0 0 var(--dm-ink);
+  transition: transform 120ms ease, box-shadow 120ms ease;
 }
 
 .dm-orgs-card::before {
   content: '';
   position: absolute;
-  inset: -1px -1px auto;
-  height: 3px;
-  background: var(--dm-org-color, var(--dm-petrol-500));
+  inset: -2px -2px auto;
+  height: 5px;
+  background: var(--dm-org-color, var(--dm-signal));
 }
 
 .dm-orgs-card:hover {
-  border-color: color-mix(in srgb, var(--dm-petrol-600) 45%, var(--dm-rule));
-  transform: translateY(-2px);
-  box-shadow: var(--dm-shadow-sm);
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 0 var(--dm-signal);
 }
 
 .dm-orgs-card__top {
@@ -109,11 +110,12 @@
 }
 
 .dm-orgs-card__identity h2 {
-  font-family: var(--dm-font-display);
-  font-size: 1.6rem;
-  font-weight: 500;
-  letter-spacing: -0.035em;
+  font-family: var(--dm-font-ui);
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
   line-height: 1;
+  text-transform: uppercase;
 }
 
 .dm-orgs-card__badges {
@@ -127,11 +129,12 @@
   display: inline-flex;
   align-items: center;
   gap: 0.22rem;
-  padding: 0.16rem 0.35rem;
+  padding: 0.2rem 0.4rem;
+  border: 1px solid var(--dm-ink);
   background: var(--dm-lagoon-soft);
-  color: var(--dm-petrol-700);
+  color: var(--dm-petrol-800);
   font-size: 0.55rem;
-  font-weight: 750;
+  font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -156,11 +159,13 @@
 
 .dm-orgs-card__rating {
   flex: none;
-  padding: 0.22rem 0.4rem;
-  border: 1px solid var(--dm-rule);
+  padding: 0.24rem 0.45rem;
+  border: 2px solid var(--dm-ink);
+  background: var(--dm-sand-soft);
   font-family: var(--dm-font-mono);
   font-size: 0.62rem;
-  color: var(--dm-sand-700);
+  font-weight: 800;
+  color: var(--dm-sand-800);
 }
 
 .dm-orgs-card__desc {
@@ -179,13 +184,18 @@
   gap: 0.3rem;
 }
 
+.dm-orgs-card__focus .dm-tag {
+  clip-path: none;
+  border-radius: 0;
+}
+
 .dm-orgs-card__foot {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
   padding-top: 0.8rem;
-  border-top: 1px solid var(--dm-rule);
+  border-top: 2px solid var(--dm-ink);
 }
 
 .dm-orgs-card__missions {
@@ -193,14 +203,14 @@
   align-items: center;
   gap: 0.4rem;
   font-size: 0.64rem;
-  font-weight: 650;
+  font-weight: 750;
   color: var(--dm-ink-soft);
 }
 
 .dm-orgs-card__missions i {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 0;
   background: var(--dm-lagoon);
   box-shadow: 0 0 0 3px var(--dm-lagoon-soft);
 }
@@ -210,7 +220,7 @@
   align-items: center;
   gap: 0.25rem;
   font-size: 0.6rem;
-  font-weight: 750;
+  font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--dm-petrol-700);
@@ -219,7 +229,7 @@
 .dm-orgs-card__more svg {
   width: 13px;
   height: 13px;
-  transition: transform 140ms ease;
+  transition: transform 120ms ease;
 }
 
 .dm-orgs-card:hover .dm-orgs-card__more svg {
@@ -228,6 +238,8 @@
 
 .dm-orgs__card-skeleton {
   height: 280px;
+  border: 2px solid var(--dm-rule);
+  box-shadow: 5px 5px 0 0 var(--dm-rule);
 }
 
 .dm-trust-band {
@@ -236,8 +248,8 @@
   gap: 1.1rem;
   margin-top: clamp(2.2rem, 4vw, 3.4rem);
   padding: 1.1rem 1.2rem;
-  border: 1px solid var(--dm-rule);
-  border-left: 3px solid var(--dm-lagoon);
+  border: 2px solid var(--dm-ink);
+  box-shadow: 5px 5px 0 0 var(--dm-ink);
   background: var(--dm-lagoon-soft);
 }
 
@@ -247,8 +259,8 @@
   width: 42px;
   height: 42px;
   flex: none;
-  border: 1px solid color-mix(in srgb, var(--dm-lagoon) 40%, var(--dm-rule));
-  color: var(--dm-petrol-700);
+  border: 2px solid var(--dm-ink);
+  color: var(--dm-petrol-800);
 }
 
 .dm-trust-band__mark svg {
@@ -261,10 +273,11 @@
 }
 
 .dm-trust-band__copy h2 {
-  font-family: var(--dm-font-display);
-  font-size: 1.35rem;
-  font-weight: 500;
-  letter-spacing: -0.02em;
+  font-family: var(--dm-font-ui);
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
 }
 
 .dm-trust-band__copy p {
