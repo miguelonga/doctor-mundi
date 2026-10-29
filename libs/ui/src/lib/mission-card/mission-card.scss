@@ -1,4 +1,3 @@
-/* TODO(card-variants/brutalist): la sombra dura de detrás debe coincidir con el color de la tarjeta (borde y miniatura). Pendiente de aplicar. */
 :host {
   display: block;
   min-width: 0;
@@ -18,7 +17,7 @@
 
 .dm-mission:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 8px 8px 0 0 var(--dm-signal);
+  box-shadow: 8px 8px 0 0 var(--dm-ink);
 }
 
 .dm-mission__media {
